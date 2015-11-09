@@ -1,0 +1,53 @@
+ * Running on http://178.62.125.116:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+109.175.191.10 - - [26/Oct/2015 07:55:34] "GET /home HTTP/1.1" 200 -
+109.175.191.10 - - [26/Oct/2015 07:55:38] "GET / HTTP/1.1" 200 -
+ * Running on http://178.62.125.116:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Running on http://178.62.125.116:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+109.175.191.10 - - [30/Oct/2015 01:28:35] "GET /home HTTP/1.1" 200 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/css/pure-custome.css HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/js/ie-emulation-modes-warning.js HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/bower_components/bootstrap/dist/css/bootstrap.min.css HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/css/styles.css HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/bower_components/bootstrap/dist/js/bootstrap.min.js HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/bower_components/jquery/dist/jquery.min.js HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/img/logo.png HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/bower_components/wysihtml/parser_rules/advanced_and_extended.js HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:36] "GET /static/img/behavioral-economics-and-big-data.png HTTP/1.1" 304 -
+109.175.191.10 - - [30/Oct/2015 01:28:42] "GET /logout HTTP/1.1" 302 -
+109.175.191.10 - - [30/Oct/2015 01:28:43] "GET / HTTP/1.1" 200 -
+109.175.191.10 - - [30/Oct/2015 01:29:39] "GET /login HTTP/1.1" 200 -
+109.175.191.10 - - [30/Oct/2015 01:29:41] "POST /login HTTP/1.1" 302 -
+109.175.191.10 - - [30/Oct/2015 01:29:41] "GET /home HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /home HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /static/css/pure-custome.css HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /static/bower_components/bootstrap/dist/css/bootstrap.min.css HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /static/css/styles.css HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /static/js/ie-emulation-modes-warning.js HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /static/img/logo.png HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /static/bower_components/jquery/dist/jquery.min.js HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /static/bower_components/bootstrap/dist/js/bootstrap.min.js HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:28] "GET /static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:29] "GET /static/bower_components/wysihtml/parser_rules/advanced_and_extended.js HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:29] "GET /static/img/behavioral-economics-and-big-data.png HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:29] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:44] "GET / HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:59] "GET /login HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:59] "GET /static/css/login.css HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:24:59] "GET /static/js/ie10-viewport-bug-workaround.js HTTP/1.1" 200 -
+130.88.192.140 - - [30/Oct/2015 08:25:04] "POST /login HTTP/1.1" 302 -
+130.88.192.140 - - [30/Oct/2015 08:25:05] "GET /home HTTP/1.1" 200 -
+66.102.9.94 - - [30/Oct/2015 08:59:20] "GET / HTTP/1.1" 200 -
+66.102.9.104 - - [30/Oct/2015 08:59:20] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+66.102.9.94 - - [01/Nov/2015 15:16:11] "GET / HTTP/1.1" 200 -
+66.102.9.84 - - [01/Nov/2015 15:16:11] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+66.102.9.94 - - [02/Nov/2015 11:46:17] "GET / HTTP/1.1" 200 -
+66.102.9.94 - - [02/Nov/2015 11:46:17] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+66.249.93.232 - - [04/Nov/2015 04:18:00] "GET / HTTP/1.1" 200 -
+66.249.93.232 - - [04/Nov/2015 04:18:00] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+66.249.93.229 - - [04/Nov/2015 11:42:13] "GET /home HTTP/1.1" 200 -
+66.102.9.104 - - [05/Nov/2015 09:48:02] "GET / HTTP/1.1" 200 -
+66.102.9.104 - - [05/Nov/2015 09:48:02] "GET /static/img/favicon.ico HTTP/1.1" 200 -

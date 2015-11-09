@@ -1,0 +1,34 @@
+{
+  "name": "wysihtml",
+  "main": "dist/wysihtml-toolbar.js",
+  "dependencies": {},
+  "homepage": "https://github.com/Voog/wysihtml",
+  "authors": [
+    "edicy",
+    "xing"
+  ],
+  "description": "wysihtml is an extended and less strict approach on xing/wysihtml5 open source rich text editor based on HTML5 technology.",
+  "keywords": [
+    "wysiwyg"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "build",
+    "examples",
+    "test",
+    "Makefile",
+    "src"
+  ],
+  "version": "0.5.1",
+  "_release": "0.5.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.5.1",
+    "commit": "be66c6954b7db78c17401b8b2b41b701e4ac1087"
+  },
+  "_source": "git://github.com/Voog/wysihtml.git",
+  "_target": "~0.5.1",
+  "_originalSource": "wysihtml",
+  "_direct": true
+}

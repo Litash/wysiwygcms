@@ -1,0 +1,81 @@
+/*
+ * Globals
+ */
+
+body {
+    /*padding-top: 10px;*/
+    margin-bottom: 10px;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #000;
+}
+
+header {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+
+/*
+ * Override Bootstrap's default container.
+ */
+
+.school-logo {
+
+}
+
+.page-title {
+    padding-left: auto;
+    padding-right: auto;
+    padding-top: 10px;
+    font-size: 34px;
+    color: #50007c;
+    cursor: pointer;
+}
+
+.content {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.sidebar {
+/*    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;*/
+}
+
+.footer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.admin-bar {
+    background: #F8F8F8;
+    height: 30px;
+    text-align: right;
+}
+
+.admin-bar span {
+    display: block;
+    margin-top: 3px;
+    margin-right: 30px;
+}
+
+iframe {
+    resize: both;
+    max-width: 720px;
+}

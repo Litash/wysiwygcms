@@ -1,0 +1,17 @@
+{% extends "layout_home.html" %}
+{% block content %}
+    {% if session.logged_in %}
+    <div class="editable">
+
+    </div>
+    <div class="hidden" id="dump">
+        {% for content in content %}{{content.text}}{% endfor %}
+    </div>
+    {% else %}
+        {% for content in content %}
+        {{content.text | safe}}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+
