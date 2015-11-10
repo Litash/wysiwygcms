@@ -51,7 +51,7 @@ def show_entries():
 def show_home():
     cur = g.db.execute('select content,url from contents where url="home.html";')
     content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
-    return render_template('home.html', content=content)
+    return render_template('home.html', content=content, username=app.config['USERNAME'])
 
 @app.route('/add', methods=['POST'])
 def add_entry():

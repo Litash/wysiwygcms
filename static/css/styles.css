@@ -63,7 +63,7 @@ header {
 }
 
 
-.admin-bar {
+/*.admin-bar {
     background: #F8F8F8;
     height: 30px;
     text-align: right;
@@ -73,7 +73,7 @@ header {
     display: block;
     margin-top: 3px;
     margin-right: 30px;
-}
+}*/
 
 iframe {
     resize: both;

@@ -31,22 +31,15 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
 
 <body>
-    {% if session.logged_in %}
-    <div class="admin-bar">
-        <span>Hello, Admin! <a href="{{ url_for('logout') }}">log out</a></span>
-    </div>
-
-    {% endif %}
     <div class="container">
         <header class="container-fluid">
             <div class="row">
                 <div class="col-sm-2">
                     <div class="logo">
-                        <a href="http://www.manchester.ac.uk/"><img src="../static/img/logo.png" class="school-logo" alt="The University of Manchester"></a>
+                        <a href="http://www.manchester.ac.uk/"><img src="../static/img/logo.png" class="img-responsive" alt="The University of Manchester"></a>
                     </div>
                 </div>
                 <div class="col-sm-10">
@@ -55,24 +48,53 @@
             </div>
         </header>
         <nav class="navbar navbar-default">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home<span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Lectures</a></li>
-                <li><a href="#">Assessment</a></li>
-                <li><a href="#">Resources</a></li>
-            </ul>
             <div class="container-fluid">
-                <div class="collapse navbar-collapse">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brand</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home<span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">Lectures</a></li>
+                        <li><a href="#">Assessment</a></li>
+                        <li><a href="#">Resources</a></li>
+                    </ul>
+                    <!-- <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form> -->
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if session.logged_in %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Edit mode</a></li>
+
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{{url_for('logout')}}">Logout</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        {% endif %}
+                    </ul>
                 </div>
                 <!-- /.navbar-collapse -->
             </div>
             <!-- /.container-fluid -->
         </nav>
         <div class="container-fluid">
-            <div class="col-sm-9 content">
-            {% block content %}{% endblock %}
-            </div>
-            <div class="col-sm-3 sidebar">
+            <div class="col-sm-3 sidebar pull-right">
                 <div class="panel panel-info">
                     <div class="panel-heading">IMPORTANT</div>
                     <!-- <div class="panel-body"></div> -->
@@ -89,6 +111,9 @@
                     </ul>
                 </div>
             </div>
+            <div class="col-sm-9 content">
+                {% block content %}{% endblock %}
+            </div>
         </div>
     </div>
     <div class="footer container">
@@ -96,7 +121,6 @@
             <p>Maintained by <a href="http://www.cs.man.ac.uk/~gbrown/">G.Brown</a></p>
         </div>
     </div>
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -113,12 +137,13 @@
         $('.editable').html(txt);
         $('.editable').on('dblclick', function(event) {
             event.preventDefault();
-            $(this).html('<div id="toolbar"><a data-wysihtml5-command="bold">bold</a>&nbsp;<a data-wysihtml5-command="italic">italic</a>&nbsp;<a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">H1</a>&nbsp;<a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">P</a></div><textarea id="editor" placeholder="">'+txt+'</textarea>')
-            var editor = new wysihtml5.Editor('editor', {
-                toolbar: 'toolbar',
-                parserRules:  wysihtml5ParserRules, // defined in file parser rules javascript
+            var wysihtmlBone = '<div id="wysihtml-toolbar" style="display: none;"> <a data-wysihtml5-command="bold">bold</a> <a data-wysihtml5-command="italic">italic</a> <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red">red</a> <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green">green</a> <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue">blue</a> <a data-wysihtml5-command="createLink">insert link</a> <div data-wysihtml5-dialog="createLink" style="display: none;"> <label> Link: <input data-wysihtml5-dialog-field="href" value="http://" class="text"> </label> <a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a> </div><a data-wysihtml5-command="insertImage">insert image</a> <div data-wysihtml5-dialog="insertImage"> <label> Image: <input data-wysihtml5-dialog-field="src" value="http://"> </label> <a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a> </div><a data-wysihtml5-command="insertImage" data-wysihtml5-command-value="http://url.com/foo.jpg">insert example image</a></div><div id="wysihtml-editor">' + txt + '</div>'
+            $(this).html(wysihtmlBone)
+            var editor = new wysihtml5.Editor('wysihtml-editor', {
+                toolbar: 'wysihtml-toolbar',
+                parserRules: wysihtml5ParserRules, // defined in file parser rules javascript
                 style: true
-              });
+            });
 
         });
     });
