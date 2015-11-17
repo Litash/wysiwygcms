@@ -4,6 +4,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from contextlib import closing
+import logging
 
 
 # create our little application :)
@@ -19,8 +20,10 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
+
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
+
 
 def init_db():
     with closing(connect_db()) as db:
@@ -28,9 +31,11 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
+
 @app.before_request
 def before_request():
     g.db = connect_db()
+
 
 @app.teardown_request
 def teardown_request(exception):
@@ -38,20 +43,24 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
+
 @app.route('/')
-def show_entries():
+# show_entries() <--- old class name
+def show_root():
     # cur = g.db.execute('select title, text from entries order by id desc')
     # entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
     # return render_template('home.html', entries=entries)
-    cur = g.db.execute('select content,url from contents where url="home.html";')
+    cur = g.db.execute('SELECT content,url FROM contents WHERE url="/home";')
     content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
     return render_template('home.html', content=content)
 
+
 @app.route('/home')
 def show_home():
-    cur = g.db.execute('select content,url from contents where url="home.html";')
+    cur = g.db.execute('SELECT content,url FROM contents WHERE url="/home";')
     content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
     return render_template('home.html', content=content, username=app.config['USERNAME'])
+
 
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -61,16 +70,24 @@ def add_entry():
                  [request.form['title'], request.form['text']])
     g.db.commit()
     flash('New entry was successfully posted')
-    return redirect(url_for('show_entries'))
+    return redirect(url_for('show_home'))
 
 
-# @app.route('/update', methods=['POST'])
-# def update_content():
-#     if not session.get('logged_in'):
-#         abort(401)
+@app.route('/update', methods=['GET', 'POST', 'PUT'])
+def update_content():
+    if not session.get('logged_in'):
+        abort(401)
+    # if request.method == 'GET':
+    logContent = request.args['content']
+    logUrl = request.args['url']
+    logging.warning('update content -------- %s', logContent)
+    logging.warning('update URL -------- %s', logUrl)
+    g.db.execute('UPDATE contents SET content = ? WHERE url = ?;',
+                [logContent, logUrl])
+    g.db.commit()
+    # flash('')
+    return redirect(url_for('show_home'))
 
-#     g.db.execute('update content set content = ? where id=3',
-#                 [request])
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -86,11 +103,13 @@ def login():
             return redirect(url_for('show_home'))
     return render_template('login-n.html', error=error)
 
+
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
-    return redirect(url_for('show_entries'))
+    return redirect(url_for('show_root'))
 
 if __name__ == '__main__':
+    # logging.basicConfig(filename='postcontent.log',level=logging.WARNING)
     app.run(host='178.62.125.116')

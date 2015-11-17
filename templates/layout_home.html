@@ -57,7 +57,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand visible-sm-inline visible-xs-inline" href="#">COMP61011:Foundations of Machine Learning</a>
+                    <a class="navbar-brand visible-sm-inline visible-xs-inline" href="#">COMP61011</a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="menu-items">
@@ -76,12 +76,12 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         {% if session.logged_in %}
+                        <li><a href="#" id="edit_mode">Edit mode</a></li>
+                        <li><a href="#" id="view_mode">View mode</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Edit mode</a></li>
-
-                                <li role="separator" class="divider"></li>
+                                <!-- <li role="separator" class="divider"></li> -->
                                 <li><a href="{{url_for('logout')}}">Logout</a></li>
                             </ul>
                         </li>
@@ -91,6 +91,7 @@
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
+                <div class="row visible-sm-inline visible-xs-inline">Foundations of Machine Learning</div>
             </div>
             <!-- /.container-fluid -->
         </nav>
@@ -132,23 +133,7 @@
     <!-- rules defining tags, attributes and classes that are allowed -->
     <script src="../static/bower_components/wysihtml/parser_rules/advanced_and_extended.js"></script>
     <!-- <script src="../static/js/wysihtml_custom.js"></script> -->
-    <script>
-    jQuery(document).ready(function($) {
-        var txt = $('#dump').text();
-        $('.editable').html(txt);
-        $('.editable').on('dblclick', function(event) {
-            event.preventDefault();
-            var wysihtmlBone = '<div id="wysihtml-toolbar" style="display: none;"> <a data-wysihtml5-command="bold">bold</a> <a data-wysihtml5-command="italic">italic</a> <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red">red</a> <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green">green</a> <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue">blue</a> <a data-wysihtml5-command="createLink">insert link</a> <div data-wysihtml5-dialog="createLink" style="display: none;"> <label> Link: <input data-wysihtml5-dialog-field="href" value="http://" class="text"> </label> <a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a> </div><a data-wysihtml5-command="insertImage">insert image</a> <div data-wysihtml5-dialog="insertImage"> <label> Image: <input data-wysihtml5-dialog-field="src" value="http://"> </label> <a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a> </div><a data-wysihtml5-command="insertImage" data-wysihtml5-command-value="http://url.com/foo.jpg">insert example image</a></div><div id="wysihtml-editor">' + txt + '</div>'
-            $(this).html(wysihtmlBone)
-            var editor = new wysihtml5.Editor('wysihtml-editor', {
-                toolbar: 'wysihtml-toolbar',
-                parserRules: wysihtml5ParserRules, // defined in file parser rules javascript
-                style: true
-            });
-
-        });
-    });
-    </script>
+    <script src="../static/js/home_view_ctrl.js"></script>
 </body>
 
 </html>

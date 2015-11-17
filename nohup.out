@@ -51,3 +51,102 @@
 66.249.93.229 - - [04/Nov/2015 11:42:13] "GET /home HTTP/1.1" 200 -
 66.102.9.104 - - [05/Nov/2015 09:48:02] "GET / HTTP/1.1" 200 -
 66.102.9.104 - - [05/Nov/2015 09:48:02] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+ * Running on http://178.62.125.116:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Running on http://178.62.125.116:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+109.175.191.6 - - [12/Nov/2015 23:07:50] "GET /home HTTP/1.1" 200 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/css/pure-custome.css HTTP/1.1" 304 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/bower_components/bootstrap/dist/css/bootstrap.min.css HTTP/1.1" 304 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/css/styles.css HTTP/1.1" 304 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/js/ie-emulation-modes-warning.js HTTP/1.1" 304 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/bower_components/jquery/dist/jquery.min.js HTTP/1.1" 304 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/bower_components/bootstrap/dist/js/bootstrap.min.js HTTP/1.1" 304 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js HTTP/1.1" 304 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/bower_components/wysihtml/parser_rules/advanced_and_extended.js HTTP/1.1" 304 -
+109.175.191.6 - - [12/Nov/2015 23:07:51] "GET /static/img/logo.png HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:30:56] "GET / HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:56] "GET /static/css/pure-custome.css HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:56] "GET /static/bower_components/bootstrap/dist/css/bootstrap.min.css HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:56] "GET /static/css/styles.css HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:56] "GET /static/js/ie-emulation-modes-warning.js HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:56] "GET /static/bower_components/jquery/dist/jquery.min.js HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:56] "GET /static/img/logo.png HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:57] "GET /static/bower_components/bootstrap/dist/js/bootstrap.min.js HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:57] "GET /static/bower_components/wysihtml/parser_rules/advanced_and_extended.js HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:57] "GET /static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:30:57] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:31:04] "GET /logout HTTP/1.1" 302 -
+130.88.192.140 - - [13/Nov/2015 07:31:04] "GET / HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:31:17] "GET /demlinear.m HTTP/1.1" 404 -
+130.88.192.140 - - [13/Nov/2015 07:31:17] "GET /favicon.ico HTTP/1.1" 404 -
+130.88.192.140 - - [13/Nov/2015 07:31:21] "GET /pgt/COMP61011/materials/matlab61011tutorial.pdf HTTP/1.1" 404 -
+130.88.192.140 - - [13/Nov/2015 07:31:38] "GET /login HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:31:38] "GET /static/css/login.css HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:31:38] "GET /static/js/ie10-viewport-bug-workaround.js HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:31:41] "POST /login HTTP/1.1" 302 -
+130.88.192.140 - - [13/Nov/2015 07:31:41] "GET /home HTTP/1.1" 200 -
+WARNING:root:update content -------- 
+WARNING:root:update URL -------- /home
+130.88.192.140 - - [13/Nov/2015 07:32:28] "GET /update?content=&url=%2Fhome HTTP/1.1" 302 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:32:28] "GET /update?content=&url=%2Fhome HTTP/1.1" 302 -
+130.88.192.140 - - [13/Nov/2015 07:32:29] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:32:29] "GET /home HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:32:48] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:32:48] "GET /home HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:32:51] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:32:51] "GET /home HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:32:51] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:32:51] "GET /login HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:32:55] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:32:55] "GET /login HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:32:56] "POST /login HTTP/1.1" 302 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:32:56] "POST /login HTTP/1.1" 302 -
+130.88.192.140 - - [13/Nov/2015 07:32:56] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:32:56] "GET /home HTTP/1.1" 200 -
+WARNING:root:update content -------- 
+WARNING:root:update URL -------- /home
+130.88.192.140 - - [13/Nov/2015 07:33:10] "GET /update?content=&url=%2Fhome HTTP/1.1" 302 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:10] "GET /update?content=&url=%2Fhome HTTP/1.1" 302 -
+130.88.192.140 - - [13/Nov/2015 07:33:10] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:10] "GET /home HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:33:20] "GET /logout HTTP/1.1" 302 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:20] "GET /logout HTTP/1.1" 302 -
+130.88.192.140 - - [13/Nov/2015 07:33:20] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:20] "GET / HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET / HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/css/pure-custome.css HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/css/pure-custome.css HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/bootstrap/dist/css/bootstrap.min.css HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/bootstrap/dist/css/bootstrap.min.css HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/css/styles.css HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/css/styles.css HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/js/ie-emulation-modes-warning.js HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/js/ie-emulation-modes-warning.js HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/jquery/dist/jquery.min.js HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/jquery/dist/jquery.min.js HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/bootstrap/dist/js/bootstrap.min.js HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/bootstrap/dist/js/bootstrap.min.js HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/wysihtml/parser_rules/advanced_and_extended.js HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/bower_components/wysihtml/parser_rules/advanced_and_extended.js HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/img/logo.png HTTP/1.1" 304 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/img/logo.png HTTP/1.1" 304 -
+130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:23] "GET /static/img/favicon.ico HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:33:25] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:25] "GET /login HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:33:26] "POST /login HTTP/1.1" 302 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:26] "POST /login HTTP/1.1" 302 -
+130.88.192.140 - - [13/Nov/2015 07:33:27] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:27] "GET /home HTTP/1.1" 200 -
+WARNING:root:update content -------- 
+WARNING:root:update URL -------- /home
+130.88.192.140 - - [13/Nov/2015 07:33:33] "GET /update?content=&url=%2Fhome HTTP/1.1" 302 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:33] "GET /update?content=&url=%2Fhome HTTP/1.1" 302 -
+130.88.192.140 - - [13/Nov/2015 07:33:33] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:33] "GET /home HTTP/1.1" 200 -
+130.88.192.140 - - [13/Nov/2015 07:33:39] "GET /arrow.m HTTP/1.1" 404 -
+INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:39] "GET /arrow.m HTTP/1.1" 404 -

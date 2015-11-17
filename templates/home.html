@@ -1,10 +1,21 @@
 {% extends "layout_home.html" %}
 {% block content %}
     {% if session.logged_in %}
-    <div class="editable"></div>
-    <div class="hidden" id="dump">
-        {% for content in content %}{{content.text}}{% endfor %}
-    </div>
+        <div class="row editable">
+        {% for content in content %}
+        {{content.text | safe}}
+        </div>
+        <form id="update_form" action="{{ url_for('update_content') }}" action="post">
+            <div class="row hidden" id="dump">
+                <input type="text" id="update_text" name="content">
+                <input type="text" id="update_url" name="url" value="{{content.url}}">
+            </div>
+            <br>
+            <div class="row">
+                <button type="submit" id="save_changes" class="btn btn-info">Save changes</button>
+            </div>
+        </form>
+        {% endfor %}
     {% else %}
         {% for content in content %}
         {{content.text | safe}}
