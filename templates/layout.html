@@ -29,10 +29,12 @@
     <button type="submit" id="save_changes" class="btn btn-default pull-right" title="Save changes"><i class="fa fa-floppy-o"></i></button>
     <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button>
     <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button>
-    <div data-wysihtml5-dialog="createLink" style="display: none;">
-        <label> Link: <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control"></label>
-        <button class="btn btn-success" data-wysihtml5-dialog-action="save">OK</button>
-        <button class="btn btn-warning" data-wysihtml5-dialog-action="cancel">Cancel</button>
+    <div  data-wysihtml5-dialog="createLink" style="display: none;">
+        <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control">
+        <div class="pull-right">
+            <button class="btn btn-default" data-wysihtml5-dialog-action="cancel">Cancel</button>
+            <button class="btn btn-primary" data-wysihtml5-dialog-action="save">OK</button>
+        </div>
     </div>
 </div>
 <div id="content_wysihtml_editor" class="wysihtml-editor">

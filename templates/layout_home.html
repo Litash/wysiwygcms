@@ -53,6 +53,10 @@
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
+                    <!-- {% if session.logged_in %}
+                        <a href="#" class="edit_mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
+                        <a href="#" class="view_mode"><i title="Go to view" class="fa fa-eye"></i></a>
+                    {% endif %} -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-items" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -78,8 +82,8 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         {% if session.logged_in %}
-                        <li><a href="#" id="edit_mode"><i title="Edit" class="fa fa-pencil"></i></a></li>
-                        <li><a href="#" id="view_mode"><i title="View" class="fa fa-eye"></i></a></li>
+                        <li><a href="#" class="edit_mode"><i title="Go to edit" class="fa fa-pencil"></i></a></li>
+                        <li><a href="#" class="view_mode"><i title="Go to view" class="fa fa-eye"></i></a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -97,7 +101,7 @@
             </div>
             <!-- /.container-fluid -->
         </nav>
-        <div class="container-fluid">
+        <div class="container-fluid ">
             <div class="side-panel col-sm-3 pull-right">
                 <div class="panel panel-info">
                     <div class="panel-heading">IMPORTANT</div>
@@ -133,22 +137,26 @@
             </div>
             <div class="modal-body">
                 <div id="side_wysihtml_toolbar" class="wysihtml-toolbar" style="display: none;">
-                    <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="bold"><i class="fa fa-bold"></i></button>
-                    <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="italic"><i class="fa fa-italic"></i></button>
-                    <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="underline"><i class="fa fa-underline"></i></button>
-                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button>
-                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button>
-                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button>
-                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"><span class="red">&nbsp;</span></button>
-                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"><span class="green">&nbsp;</span></button>
-                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"><span class="blue">&nbsp;</span></button>
-                    <button class="btn btn-default" data-wysihtml5-command="createLink" title="insert link"><i class="fa fa-link" unselectable="on"></i></button>
-                    <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button>
-                    <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button>
+
+                        <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="bold"><i class="fa fa-bold"></i></button>
+                        <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="italic"><i class="fa fa-italic"></i></button>
+                        <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="underline"><i class="fa fa-underline"></i></button>
+                        <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button>
+                        <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button>
+                        <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button>
+                        <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"><span class="red">&nbsp;</span></button>
+                        <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"><span class="green">&nbsp;</span></button>
+                        <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"><span class="blue">&nbsp;</span></button>
+                        <button class="btn btn-default" data-wysihtml5-command="createLink" title="insert link"><i class="fa fa-link" unselectable="on"></i></button>
+                        <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button>
+                        <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button>
+
                     <div data-wysihtml5-dialog="createLink" style="display: none;">
-                        <label> Link: <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control"></label>
-                        <button class="btn btn-success" data-wysihtml5-dialog-action="save">OK</button>
-                        <button class="btn btn-warning" data-wysihtml5-dialog-action="cancel">Cancel</button>
+                        <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control">
+                        <div class="pull-right">
+                            <button class="btn btn-default" data-wysihtml5-dialog-action="cancel">Cancel</button>
+                            <button class="btn btn-primary" data-wysihtml5-dialog-action="save">OK</button>
+                        </div>
                     </div>
                 </div>
                 <div id="side_wysihtml_editor" class="wysihtml-editor">

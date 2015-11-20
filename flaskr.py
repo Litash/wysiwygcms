@@ -52,7 +52,10 @@ def show_root():
     # return render_template('home.html', entries=entries)
     cur = g.db.execute('SELECT content,url FROM contents WHERE url="/home";')
     content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
-    return render_template('home.html', content=content)
+
+    cur = g.db.execute('SELECT item,id FROM sidepanel ORDER BY id DESC;')
+    sideitem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
+    return render_template('home.html', content=content, sideitem=sideitem)
 
 
 @app.route('/home')
