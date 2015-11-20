@@ -59,7 +59,10 @@ def show_root():
 def show_home():
     cur = g.db.execute('SELECT content,url FROM contents WHERE url="/home";')
     content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
-    return render_template('home.html', content=content, username=app.config['USERNAME'])
+
+    cur = g.db.execute('SELECT item,id FROM sidepanel ORDER BY id DESC;')
+    sideitem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
+    return render_template('home.html', content=content, sideitem=sideitem, username=app.config['USERNAME'])
 
 
 @app.route('/add', methods=['POST'])
@@ -84,6 +87,50 @@ def update_content():
     logging.warning('update URL -------- %s', logUrl)
     g.db.execute('UPDATE contents SET content = ? WHERE url = ?;',
                 [logContent, logUrl])
+    g.db.commit()
+    # flash('')
+    return redirect(url_for('show_home'))
+
+@app.route('/createside', methods=['GET', 'POST', 'PUT'])
+def create_side():
+    if not session.get('logged_in'):
+        abort(401)
+    # if request.method == 'GET':
+    logItem = request.args['item']
+
+    logging.warning('update item -------- %s', logItem)
+
+    g.db.execute('INSERT INTO sidepanel (item) VALUES (?);',
+                [logItem])
+    g.db.commit()
+    # flash('')
+    return redirect(url_for('show_home'))
+
+@app.route('/updateside', methods=['GET', 'POST', 'PUT'])
+def update_side():
+    if not session.get('logged_in'):
+        abort(401)
+    # if request.method == 'GET':
+    logItem = request.args['item']
+    logID = request.args['id']
+    logging.warning('update item -------- %s', logItem)
+    logging.warning('update id -------- %s', logID)
+    g.db.execute('UPDATE sidepanel SET item = ? WHERE id = ?;',
+                [logItem, logID])
+    g.db.commit()
+    # flash('')
+    return redirect(url_for('show_home'))
+
+
+@app.route('/deleleside', methods=['GET', 'POST', 'PUT'])
+def delete_side():
+    if not session.get('logged_in'):
+        abort(401)
+    # if request.method == 'GET':
+    logID = request.args['id']
+    logging.warning('update content -------- %s', logID)
+    g.db.execute('DELETE FROM sidepanel WHERE id = ?;',
+                [logID])
     g.db.commit()
     # flash('')
     return redirect(url_for('show_home'))

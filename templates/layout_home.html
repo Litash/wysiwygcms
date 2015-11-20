@@ -11,8 +11,10 @@
     <link rel="icon" href="../static/img/favicon.ico">
     <title>COMP61011:Foundations of Machine Learning</title>
     <!-- Pure css -->
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="../static/css/pure-custome.css">
+    <!-- <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="../static/css/pure-custome.css"> -->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!--[if lte IE 8]>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
     <![endif]-->
@@ -76,8 +78,8 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         {% if session.logged_in %}
-                        <li><a href="#" id="edit_mode">Edit mode</a></li>
-                        <li><a href="#" id="view_mode">View mode</a></li>
+                        <li><a href="#" id="edit_mode"><i title="Edit" class="fa fa-pencil"></i></a></li>
+                        <li><a href="#" id="view_mode"><i title="View" class="fa fa-eye"></i></a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -96,20 +98,17 @@
             <!-- /.container-fluid -->
         </nav>
         <div class="container-fluid">
-            <div class="col-sm-3 sidebar pull-right">
+            <div class="side-panel col-sm-3 pull-right">
                 <div class="panel panel-info">
                     <div class="panel-heading">IMPORTANT</div>
                     <!-- <div class="panel-body"></div> -->
                     <!-- List group -->
                     <ul class="list-group">
-                        <li class="list-group-item">
-                            <p><big><font color="red">NEWS</font></big>: Please note that the page limit for the reports is 6 (six) pages, not eight as previously mentioned.</p>
+                        {% for item in sideitem %}
+                        <li class="list-group-item" id="side_item_{{item.id}}">
+                            {{ item.item | safe }}
                         </li>
-                        <li class="list-group-item">
-                            <p><big><font color="red">NEWS</font></big>: Those of you using Windows had a few problems running the <b>demlogreg</b> demo and related functions. Sorry about that. This was due to a slight incompatibility between Matlab 2015a on Windows, and the version of Matlab on the Linux machines. It can be fixed by downloading two files: <a href="./arrow.m">arrow.m</a> and <a href="./demlinear.m">demilnear.m</a> which should replace the two corresponding files in the MLOtools toolbox you downloaded. These are at the file location: <b>MLOtools/61011/demlin/</b>.
-                                <font color="red">You should only do this if using Windows.</font>
-                            </p>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -123,6 +122,51 @@
             <p>Maintained by <a href="http://www.cs.man.ac.uk/~gbrown/">G.Brown</a></p>
         </div>
     </div>
+
+    <!-- side panel edit modal -->
+    <div class="modal fade" id="side_panel_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edit item</h4>
+            </div>
+            <div class="modal-body">
+                <div id="side_wysihtml_toolbar" class="wysihtml-toolbar" style="display: none;">
+                    <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="bold"><i class="fa fa-bold"></i></button>
+                    <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="italic"><i class="fa fa-italic"></i></button>
+                    <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="underline"><i class="fa fa-underline"></i></button>
+                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button>
+                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button>
+                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button>
+                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"><span class="red">&nbsp;</span></button>
+                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"><span class="green">&nbsp;</span></button>
+                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"><span class="blue">&nbsp;</span></button>
+                    <button class="btn btn-default" data-wysihtml5-command="createLink" title="insert link"><i class="fa fa-link" unselectable="on"></i></button>
+                    <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button>
+                    <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button>
+                    <div data-wysihtml5-dialog="createLink" style="display: none;">
+                        <label> Link: <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control"></label>
+                        <button class="btn btn-success" data-wysihtml5-dialog-action="save">OK</button>
+                        <button class="btn btn-warning" data-wysihtml5-dialog-action="cancel">Cancel</button>
+                    </div>
+                </div>
+                <div id="side_wysihtml_editor" class="wysihtml-editor">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="side_delete_item" class="btn btn-danger">Delete message&nbsp;<i class="fa fa-trash-o"></i></button>
+                <button type="button" id="side_save_changes" class="btn btn-primary">Save changes&nbsp;<i class="fa fa-floppy-o"></i></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

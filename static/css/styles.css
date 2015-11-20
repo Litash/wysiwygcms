@@ -51,18 +51,43 @@ header {
     line-height: 1.5;
 }
 
-.sidebar {
-/*    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 15px;*/
-}
-
 .footer {
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
+/*
+** Styles for side panel
+*/
 
+.side-panel {
+/*    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;*/
+}
+
+.list-hover:hover {
+    cursor: pointer;
+    background: #F8F8F8;
+}
+
+.edit-trigger {
+    cursor: pointer;
+    padding: 0px 10px;
+}
+
+.add-list-item {
+    cursor: pointer;
+    text-align: center;
+}
+
+.add-list-item:hover {
+    background: #F8F8F8;
+}
+
+.expand-modal-editor {
+    height: 100px;
+}
 /*.admin-bar {
     background: #F8F8F8;
     height: 30px;
@@ -75,13 +100,34 @@ header {
     margin-right: 30px;
 }*/
 
-#wysihtml-toolbar {
+.wysihtml-toolbar {
     background: #E7E7E7;
+    padding: 3px;
 }
 
-#wysihtml-editor{
-    border-style: inset;
-    border-width: 2px;
+.wysihtml-toolbar .btn {
+    margin: 1px;
+}
+
+.wysihtml-toolbar span.red {
+    padding: 0px 5px;
+    background-color: red;
+}
+
+.wysihtml-toolbar span.green {
+    padding: 0px 5px;
+    background-color: green;
+}
+
+.wysihtml-toolbar span.blue {
+    padding: 0px 5px;
+    background-color: blue;
+}
+
+.wysihtml-editor{
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.0980392);
+    border-width: 1px;
 }
 
 
@@ -126,7 +172,7 @@ header {
 }
 
 .wysiwyg-color-black {
-  color: black;
+  color: #000;
 }
 
 .wysiwyg-color-silver {

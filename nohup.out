@@ -150,3 +150,5 @@ INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:33] "GET /update?content=&ur
 INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:33] "GET /home HTTP/1.1" 200 -
 130.88.192.140 - - [13/Nov/2015 07:33:39] "GET /arrow.m HTTP/1.1" 404 -
 INFO:werkzeug:130.88.192.140 - - [13/Nov/2015 07:33:39] "GET /arrow.m HTTP/1.1" 404 -
+ * Running on http://178.62.125.116:5000/ (Press CTRL+C to quit)
+ * Restarting with stat

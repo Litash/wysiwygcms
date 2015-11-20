@@ -11,3 +11,9 @@ create table contents (
   content text not null,
   url text not null
 );
+
+drop table if exists sidepanel;
+create table sidepanel (
+    id integer primary key autoincrement,
+    item text not null
+);
