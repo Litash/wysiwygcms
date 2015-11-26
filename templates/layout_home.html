@@ -54,8 +54,8 @@
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <!-- {% if session.logged_in %}
-                        <a href="#" class="edit_mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
-                        <a href="#" class="view_mode"><i title="Go to view" class="fa fa-eye"></i></a>
+                        <a href="#" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
+                        <a href="#" class="side-view-mode"><i title="Go to view" class="fa fa-eye"></i></a>
                     {% endif %} -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-items" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
@@ -82,8 +82,6 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         {% if session.logged_in %}
-                        <li><a href="#" class="edit_mode"><i title="Go to edit" class="fa fa-pencil"></i></a></li>
-                        <li><a href="#" class="view_mode"><i title="Go to view" class="fa fa-eye"></i></a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -104,7 +102,16 @@
         <div class="container-fluid ">
             <div class="side-panel col-sm-3 pull-right">
                 <div class="panel panel-info">
-                    <div class="panel-heading">IMPORTANT</div>
+                    <div class="panel-heading">
+                        <span>IMPORTANT</span>
+                        {% if session.logged_in %}
+                        <div class="pull-right">
+                            <a href="#" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
+                            <a href="#" class="side-view-mode"><i title="Go to view" class="fa fa-eye"></i></a>
+                        </div>
+                        {% endif %}
+                    </div>
+
                     <!-- <div class="panel-body"></div> -->
                     <!-- List group -->
                     <ul class="list-group">

@@ -60,13 +60,25 @@ header {
 ** Styles for side panel
 */
 
-.side-panel {
-/*    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 15px;*/
+.side-panel .panel {
+
 }
 
-.list-hover:hover {
+/*add scroll bar to side panel*/
+@media(min-width: 768px){
+    .side-panel .list-group {
+        overflow: auto;
+        max-height:640px;
+    }
+}
+@media (max-width: 767px) {
+    .side-panel .list-group {
+        overflow: auto;
+        max-height:300px;
+    }
+}
+
+.side-panel .list-hover:hover {
     cursor: pointer;
     background: #F8F8F8;
 }
@@ -86,7 +98,7 @@ header {
 }
 
 .expand-modal-editor {
-    height: 100px;
+    min-height: 100px;
 }
 /*.admin-bar {
     background: #F8F8F8;
