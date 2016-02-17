@@ -1,16 +1,18 @@
+# -*- coding: utf-8 -*-
 # all the imports
 import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash
+    abort, render_template, flash, send_from_directory
 from contextlib import closing
 import logging
-from werkzeug import secure_filename # for file upload
-import uuid # for CAS
-import time
+import uuid  # for CAS
+import time  # for CAS
+from werkzeug import secure_filename # for uploading files
 
-UPLOAD_FOLDER = '/files'
+UPLOAD_FOLDER = '/root/litash/flaskProject/flaskr/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
 # create our little application
 app = Flask(__name__)
 
@@ -18,11 +20,14 @@ app = Flask(__name__)
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'flaskr.db'),
     DEBUG=True,
-    SECRET_KEY='development key',
-    USERNAME='admin',
-    PASSWORD='admin'
+    SECRET_KEY='Yooo!',
+    UPLOAD_FOLDER=UPLOAD_FOLDER,
+    MAX_CONTENT_LENGTH=16 * 1024 * 1024
 ))
+#     USERNAME='admin',
+#     PASSWORD='admin'
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
@@ -64,6 +69,8 @@ def show_root():
 def show_home():
 
     if session.get('username'):
+        # uncomment following line and comment out above to only allow staff to login
+        # if session.get('username') and session['usercategory']=='staff':
         username = session['fullname']
     else:
         username = "SoooooSad"
@@ -98,10 +105,11 @@ def update_content():
     logging.info('---------- update content -------- %s', logContent)
     logging.info('---------- update URL -------- %s', logUrl)
     g.db.execute('UPDATE contents SET content = ? WHERE url = ?;',
-                [logContent, logUrl])
+                 [logContent, logUrl])
     g.db.commit()
     # flash('')
     return redirect(url_for('show_home'))
+
 
 @app.route('/createside', methods=['GET', 'POST', 'PUT'])
 def create_side():
@@ -113,10 +121,11 @@ def create_side():
     logging.info('---------- update item -------- %s', logItem)
 
     g.db.execute('INSERT INTO sidepanel (item) VALUES (?);',
-                [logItem])
+                 [logItem])
     g.db.commit()
     # flash('')
     return redirect(url_for('show_home'))
+
 
 @app.route('/updateside', methods=['GET', 'POST', 'PUT'])
 def update_side():
@@ -128,7 +137,7 @@ def update_side():
     logging.info('---------- update item -------- %s', logItem)
     logging.info('---------- update id -------- %s', logID)
     g.db.execute('UPDATE sidepanel SET item = ? WHERE id = ?;',
-                [logItem, logID])
+                 [logItem, logID])
     g.db.commit()
     # flash('')
     return redirect(url_for('show_home'))
@@ -142,23 +151,11 @@ def delete_side():
     logID = request.args['id']
     logging.info('---------- update content -------- %s', logID)
     g.db.execute('DELETE FROM sidepanel WHERE id = ?;',
-                [logID])
+                 [logID])
     g.db.commit()
     # flash('')
     return redirect(url_for('show_home'))
 
-
-
-# program requiring authentication.
-DEVELOPER_URL = "http://178.62.125.116:5000/login"
-
-# Define the location of the service on the Computer Science server.
-AUTHENTICATION_SERVICE_URL = "http://studentnet.cs.manchester.ac.uk/authenticate/"
-
-# Define the location of CAS's logtout service on the Computer Science server.
-AUTHENTICATION_LOGOUT_URL = "http://studentnet.cs.manchester.ac.uk/systemlogout.php"
-
-studylevel = False
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -173,14 +170,12 @@ def login():
     # Else if the GET parameter csticket is empty this is a new user who
     # we need to send for authentication.
     elif not request.args.get('csticket'):
-        logging.warning("----- 1 -----")
         url = sendForAuthentication()
         return redirect(url)
 
     # Else if the GET parameter csticket is populated but doesn't match
     # the session csticket send the user for authentication.
-    elif request.args.get('csticket')!= session['csticket']:
-        logging.warning("----- 3 -----")
+    elif request.args.get('csticket') != session['csticket']:
         url = sendForAuthentication()
         return redirect(url)
 
@@ -189,26 +184,43 @@ def login():
         session['logged_in'] = True
         return redirect(url_for('show_home'))
 
+# =================================
+# ============== CAS ==============
+# =================================
+
+# program requiring authentication.
+DEVELOPER_URL = "http://178.62.125.116:5000/login"
+
+# Define the location of the service on the Computer Science server.
+AUTHENTICATION_SERVICE_URL = "http://studentnet.cs.manchester.ac.uk/authenticate/"
+
+# Define the location of CAS's logtout service on the Computer Science server.
+AUTHENTICATION_LOGOUT_URL = "http://studentnet.cs.manchester.ac.uk/systemlogout.php"
+
+studylevel = False
+
 
 def isAuthenticated():
     """
-    A static function to determine whether a user is already authenticated.
+    A function to determine whether a user is already authenticated.
     @return boolean (true if authenticated, false if not)
     """
     # When a user is authenticated the session["authenticated"] is
     # populated with a timestamp. If a numerical value is held return true.
     authenticatedtimestamp = getTimeAuthenticated()
 
-    if authenticatedtimestamp!="False":
+    if authenticatedtimestamp != "False":
         return True
     else:
         return False
 
-# A static function to send a user to the authentication service.
+
 def sendForAuthentication():
-    logging.warning("----- 2 -----")
+    """
+    A function to send a user to the authentication service.
+    """
     # Generate a unique ticket.
-    csticket = str(uuid.uuid1())
+    csticket = str(uuid.uuid4())
 
     # Save the ticket so we can confirm the same user is returning from
     # the authentication service.
@@ -218,17 +230,21 @@ def sendForAuthentication():
     # Append to the url the GET parameters 'url' which tells the
     # authentication service where to return and append the csticket which
     # will be used to confirm that the same user is returning.
-    url = AUTHENTICATION_SERVICE_URL+"?url="+DEVELOPER_URL+"&csticket="+csticket
+    url = AUTHENTICATION_SERVICE_URL + "?url=" + \
+        DEVELOPER_URL + "&csticket=" + csticket
 
-    logging.warning(url+"\n\nredirecting\n")
+    logging.warning(url + "\n\nredirecting\n")
     return url
 
 
-# A static function to record that a user is authenticated.
 def recordAuthenticatedUser():
+    """
+    A function to record that a user is authenticated.
+    """
     # Record the time authenticated.
     session["authenticated"] = str(time.time())
-    logging.warning("----- authenticated timestamp "+session["authenticated"]+" -----")
+    logging.warning(
+        "----- authenticated timestamp " + session["authenticated"] + " -----")
 
     # Record the user's username.
     session["username"] = request.args["username"]
@@ -247,31 +263,81 @@ def recordAuthenticatedUser():
     # if (isset(request.args["studylevel"]))
     #     session["studylevel"] = request.args["studylevel"]
 
-# A static function to get the timestamp when the user authenticated.
 # @return string
+
+
 def getTimeAuthenticated():
+    """
+    A function to get the timestamp when the user authenticated.
+    """
     if session.get("authenticated"):
         return session["authenticated"]
     else:
         return "False"
 
-# A static function to invalidate a user. This function will remove the
-# data from the global variable session
-def invalidateUser():
-    session.clear()
-    redirect(AUTHENTICATION_LOGOUT_URL)
 
-# A static function to reject a user who has failed to authenticate.
 def rejectUser():
+    """
+    A function to reject a user who has failed to authenticate.
+    """
     logging.warning("----- reject -----")
     # sys.exit("Authentication failure")
-    redirect("http://178.62.125.116:5000")
+    redirect(url_for("show_root"))
+
 
 @app.route('/logout')
 def logout():
     # logging.info('---------- Logging out %s ----------', session['username'])
     session.clear()
     return redirect(AUTHENTICATION_LOGOUT_URL)
+
+# =================================
+# ========== File upload ==========
+# =================================
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    """
+    function for uploading files
+    """
+    # if request.method == 'POST':
+    #     file = request.files['file']
+    #     if file and allowed_file(file.filename):
+    #         filename = secure_filename(file.filename)
+    #         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #         return redirect(url_for('uploaded_file',
+    #                                 filename=filename))
+    # return '''
+    # <!doctype html>
+    # <title>Upload new File</title>
+    # <h1>Upload new File</h1>
+    # <form action="" method=post enctype=multipart/form-data>
+    #   <p><input type=file name=file>
+    #      <input type=submit value=Upload>
+    # </form>
+    # '''
+
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        logging.warning("----------------------------- uploading")
+        return redirect(url_for('uploaded_file', filename=filename))
+        # return render_template('uploaded_img.html',)
+    return redirect(url_for('show_home'))
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    """
+    function for serving uploaded files
+    """
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
 
 
 if __name__ == '__main__':

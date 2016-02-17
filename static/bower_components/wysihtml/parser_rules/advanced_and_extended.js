@@ -51,9 +51,9 @@ var wysihtml5ParserRules = {
         "MsoNormal": 1,
         "MsoPlainText": 1
     },
-    
+
     "type_definitions": {
-        
+
         "alignment_object": {
             "classes": {
                 "wysiwyg-text-align-center": 1,
@@ -68,26 +68,26 @@ var wysihtml5ParserRules = {
                 "text-align": ["left", "right", "center"]
             }
         },
-        
+
         "valid_image_src": {
             "attrs": {
                 "src": /^[^data\:]/i
             }
         },
-        
+
         "text_color_object": {
           "styles": {
             "color": true,
             "background-color": true
           }
         },
-        
+
         "text_fontsize_object": {
           "styles": {
             "font-size": true
           }
         },
-        
+
         "text_formatting_object": {
             "classes": {
                 "wysiwyg-color-aqua": 1,
@@ -120,7 +120,7 @@ var wysihtml5ParserRules = {
     },
 
     "comments": 1, // if set allows comments to pass
-    
+
     /**
      * Tag list
      *
@@ -133,7 +133,7 @@ var wysihtml5ParserRules = {
      *                          - clear_br:    converts clear attribute values left/right/all/both to their corresponding css class "wysiwyg-clear-*"
      *                            <br clear="all"> ... becomes ... <br class="wysiwyg-clear-both">
      *                          - align_img:    converts align attribute values (right/left) on <img> to their corresponding css class "wysiwyg-float-*"
-     *                          
+     *
      *    - remove:             removes the element and its content
      *
      *    - unwrap              removes element but leaves content
@@ -151,7 +151,7 @@ var wysihtml5ParserRules = {
      *                            - alt:            strips unwanted characters. if the attribute is not set, then it gets set (to ensure valid and compatible HTML)
      *                            - numbers:        ensures that the attribute only contains numeric (integer) characters (no float values or units)
      *                            - dimension:      for with/height attributes where floating point numbrs and percentages are allowed
-     *                            - any:            allows anything to pass 
+     *                            - any:            allows anything to pass
      */
     "tags": {
         "tr": {
@@ -253,10 +253,10 @@ var wysihtml5ParserRules = {
                 "valid_image_src": 1
             },
             "check_attributes": {
-                "width": "dimension",
+                "width": "100",
                 "alt": "alt",
                 "src": "src", // if you compiled master manually then change this from 'url' to 'src'
-                "height": "dimension",
+                "height": "100",
                 "id": "any"
             },
             "add_class": {
@@ -320,7 +320,7 @@ var wysihtml5ParserRules = {
         "object": {
             "remove": 1
         },
-        
+
         "div": {
             "one_of_type": {
                 "alignment_object": 1
@@ -338,7 +338,7 @@ var wysihtml5ParserRules = {
                 "contenteditable": "any"
             }
         },
-        
+
         "option": {
             "remove":1
         },
@@ -648,7 +648,7 @@ var wysihtml5ParserRules = {
     commonRules.tags.style  = { "remove": 1 };
     commonRules.tags.script = { "remove": 1 };
     commonRules.tags.head = { "remove": 1 };
-    
+
     // Paste cleanup for unindentified source
     var universalRules = wysihtml5.lang.object(commonRules).clone(true);
     universalRules.tags.div.one_of_type.alignment_object = 1;

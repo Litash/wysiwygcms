@@ -1,0 +1,13 @@
+{% extends "layout_home.html" %}
+{% block upload %}
+<form id="img_upload_frm" action="{{ url_for('upload_file') }}" action="post" enctype=multipart/form-data>
+    <div class="row">
+        <div class="input-group">
+        <input type="file" name="file" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+            <button id="btn_upload" type="button" class="btn btn-primary">Upload</button>
+        </span>
+    </div><!-- /input-group -->
+    </div>
+</form>
+{% endblock %}

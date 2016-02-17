@@ -1,3 +1,3 @@
 # A WYSIWYG content management system build on flask
-Trail and error project, will be transfered to another repo or deleted.
+a WYSIWYG content management system which is initially designed for this [course website](http://studentnet.cs.manchester.ac.uk/pgt/COMP61011/extra.php) .
 
