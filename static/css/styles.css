@@ -118,7 +118,7 @@ header {
 }
 
 .wysihtml-toolbar .btn {
-    margin: 1px;
+    /*margin: 1px;*/
 }
 
 .wysihtml-toolbar span.red {
@@ -144,8 +144,13 @@ header {
 
 
 /*
-** Style for wysihtml editor
+** Style for main wysihtml editor
 */
+.wysihtml-toolbar .row{
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-bottom: 3px;
+}
 
 .wysiwyg-font-size-smaller {
   font-size: smaller;
