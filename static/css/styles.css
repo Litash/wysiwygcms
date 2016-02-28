@@ -33,9 +33,7 @@ header {
  * Override Bootstrap's default container.
  */
 
-.school-logo {
-
-}
+.school-logo {}
 
 .page-title {
     padding-left: auto;
@@ -56,25 +54,27 @@ header {
     margin-bottom: 20px;
 }
 
+
 /*
 ** Styles for side panel
 */
 
-.side-panel .panel {
+.side-panel .panel {}
 
-}
 
 /*add scroll bar to side panel*/
-@media(min-width: 768px){
+
+@media(min-width: 768px) {
     .side-panel .list-group {
         overflow: auto;
-        max-height:640px;
+        max-height: 640px;
     }
 }
+
 @media (max-width: 767px) {
     .side-panel .list-group {
         overflow: auto;
-        max-height:300px;
+        max-height: 300px;
     }
 }
 
@@ -100,6 +100,8 @@ header {
 .expand-modal-editor {
     min-height: 100px;
 }
+
+
 /*.admin-bar {
     background: #F8F8F8;
     height: 30px;
@@ -136,7 +138,7 @@ header {
     background-color: blue;
 }
 
-.wysihtml-editor{
+.wysihtml-editor {
     border-style: solid;
     border-color: rgba(0, 0, 0, 0.0980392);
     border-width: 1px;
@@ -146,142 +148,154 @@ header {
 /*
 ** Style for main wysihtml editor
 */
-.wysihtml-toolbar .row{
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-bottom: 3px;
+
+.wysihtml-toolbar .row {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 3px;
 }
 
 .wysiwyg-font-size-smaller {
-  font-size: smaller;
+    font-size: smaller;
 }
 
 .wysiwyg-font-size-larger {
-  font-size: larger;
+    font-size: larger;
 }
 
 .wysiwyg-font-size-xx-large {
-  font-size: xx-large;
+    font-size: xx-large;
 }
 
 .wysiwyg-font-size-x-large {
-  font-size: x-large;
+    font-size: x-large;
 }
 
 .wysiwyg-font-size-large {
-  font-size: large;
+    font-size: large;
 }
 
 .wysiwyg-font-size-medium {
-  font-size: medium;
+    font-size: medium;
 }
 
 .wysiwyg-font-size-small {
-  font-size: small;
+    font-size: small;
 }
 
 .wysiwyg-font-size-x-small {
-  font-size: x-small;
+    font-size: x-small;
 }
 
 .wysiwyg-font-size-xx-small {
-  font-size: xx-small;
+    font-size: xx-small;
 }
 
 .wysiwyg-color-black {
-  color: #000;
+    color: #000;
 }
 
 .wysiwyg-color-silver {
-  color: silver;
+    color: silver;
 }
 
 .wysiwyg-color-gray {
-  color: gray;
+    color: gray;
 }
 
 .wysiwyg-color-white {
-  color: white;
+    color: white;
 }
 
 .wysiwyg-color-maroon {
-  color: maroon;
+    color: maroon;
 }
 
 .wysiwyg-color-red {
-  color: red;
+    color: red;
 }
 
 .wysiwyg-color-purple {
-  color: purple;
+    color: purple;
 }
 
 .wysiwyg-color-fuchsia {
-  color: fuchsia;
+    color: fuchsia;
 }
 
 .wysiwyg-color-green {
-  color: green;
+    color: green;
 }
 
 .wysiwyg-color-lime {
-  color: lime;
+    color: lime;
 }
 
 .wysiwyg-color-olive {
-  color: olive;
+    color: olive;
 }
 
 .wysiwyg-color-yellow {
-  color: yellow;
+    color: yellow;
 }
 
 .wysiwyg-color-navy {
-  color: navy;
+    color: navy;
 }
 
 .wysiwyg-color-blue {
-  color: blue;
+    color: blue;
 }
 
 .wysiwyg-color-teal {
-  color: teal;
+    color: teal;
 }
 
 .wysiwyg-color-aqua {
-  color: aqua;
+    color: aqua;
 }
 
 .wysiwyg-text-align-right {
-  text-align: right;
+    text-align: right;
 }
 
 .wysiwyg-text-align-center {
-  text-align: center;
+    text-align: center;
 }
 
 .wysiwyg-text-align-left {
-  text-align: left;
+    text-align: left;
 }
 
 .wysiwyg-text-align-justify {
-  text-align: justify;
+    text-align: justify;
 }
 
 .wysiwyg-float-left {
-  float: left;
-  margin: 0 8px 8px 0;
+    float: left;
+    margin: 0 8px 8px 0;
 }
 
 .wysiwyg-float-right {
-  float: right;
-  margin: 0 0 8px 8px;
+    float: right;
+    margin: 0 0 8px 8px;
 }
 
 .wysiwyg-clear-right {
-  clear: right;
+    clear: right;
 }
 
 .wysiwyg-clear-left {
-  clear: left;
+    clear: left;
+}
+
+
+/*
+** miscellaneous
+*/
+
+#upload_console_icon img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }

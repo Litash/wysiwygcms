@@ -3,18 +3,23 @@
 import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-    abort, render_template, flash, send_from_directory
+    abort, render_template, flash, send_from_directory, jsonify
 from contextlib import closing
 import logging
 import uuid  # for CAS
 import time  # for CAS
-from werkzeug import secure_filename # for uploading files
-
-UPLOAD_FOLDER = '/root/litash/flaskProject/flaskr/uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+from werkzeug import secure_filename  # for uploading files
+from flask.ext.autoindex import AutoIndex
 
 # create our little application
 app = Flask(__name__)
+
+
+UPLOAD_FOLDER = app.root_path + '/uploads'
+ALLOWED_EXTENSIONS = set(['txt', 'TXT', 'pdf', 'PDF',
+                          'png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF',
+                          'doc', 'DOC', 'docx', 'DOCX'])
+
 
 # Load default config and override config from an environment variable
 app.config.update(dict(
@@ -27,7 +32,7 @@ app.config.update(dict(
 #     USERNAME='admin',
 #     PASSWORD='admin'
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
@@ -69,7 +74,8 @@ def show_root():
 def show_home():
 
     if session.get('username'):
-        # uncomment following line and comment out above to only allow staff to login
+        # uncomment following line and comment out above
+        # to only allow staff to login
         # if session.get('username') and session['usercategory']=='staff':
         username = session['fullname']
     else:
@@ -190,13 +196,10 @@ def login():
 
 # program requiring authentication.
 DEVELOPER_URL = "http://178.62.125.116:5000/login"
-
 # Define the location of the service on the Computer Science server.
-AUTHENTICATION_SERVICE_URL = "http://studentnet.cs.manchester.ac.uk/authenticate/"
-
+AUTH_SERVICE_URL = "http://studentnet.cs.manchester.ac.uk/authenticate/"
 # Define the location of CAS's logtout service on the Computer Science server.
-AUTHENTICATION_LOGOUT_URL = "http://studentnet.cs.manchester.ac.uk/systemlogout.php"
-
+AUTH_LOGOUT_URL = "http://studentnet.cs.manchester.ac.uk/systemlogout.php"
 studylevel = False
 
 
@@ -230,7 +233,7 @@ def sendForAuthentication():
     # Append to the url the GET parameters 'url' which tells the
     # authentication service where to return and append the csticket which
     # will be used to confirm that the same user is returning.
-    url = AUTHENTICATION_SERVICE_URL + "?url=" + \
+    url = AUTH_SERVICE_URL + "?url=" + \
         DEVELOPER_URL + "&csticket=" + csticket
 
     logging.warning(url + "\n\nredirecting\n")
@@ -289,38 +292,25 @@ def rejectUser():
 def logout():
     # logging.info('---------- Logging out %s ----------', session['username'])
     session.clear()
-    return redirect(AUTHENTICATION_LOGOUT_URL)
+    return redirect(AUTH_LOGOUT_URL)
 
 # =================================
 # ========== File upload ==========
 # =================================
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
     """
     function for uploading files
     """
-    # if request.method == 'POST':
-    #     file = request.files['file']
-    #     if file and allowed_file(file.filename):
-    #         filename = secure_filename(file.filename)
-    #         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    #         return redirect(url_for('uploaded_file',
-    #                                 filename=filename))
-    # return '''
-    # <!doctype html>
-    # <title>Upload new File</title>
-    # <h1>Upload new File</h1>
-    # <form action="" method=post enctype=multipart/form-data>
-    #   <p><input type=file name=file>
-    #      <input type=submit value=Upload>
-    # </form>
-    # '''
-
+    if not session.get('logged_in'):
+        abort(401)
     file = request.files['file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -331,13 +321,45 @@ def upload_file():
     return redirect(url_for('show_home'))
 
 
+@app.route('/uploadajax', methods=['POST'])
+def upload_file_ajax():
+    """
+    function for uploading files
+    """
+    if not session.get('logged_in'):
+        abort(401)
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        updir = app.config['UPLOAD_FOLDER']
+        file.save(os.path.join(updir, filename))
+        file_size = os.path.getsize(os.path.join(updir, filename))
+        return jsonify(name=filename, size=file_size)
+    return jsonify(name="invalid file", size=0)
+
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     """
     function for serving uploaded files
     """
+    if not session.get('logged_in'):
+        abort(401)
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
+
+
+# make /uploads visible using AutoIndex
+idx = AutoIndex(app, app.config['UPLOAD_FOLDER'], add_url_rules=True)
+idx.add_icon_rule('page_white_acrobat.png', ext=['pdf', 'PDF'])
+
+
+@app.route('/uploads')
+def uploaded_files():
+    """
+    function for serving uploaded files
+    """
+    return idx.render_autoindex('/', show_hidden=None, sort_by='name')
 
 
 if __name__ == '__main__':

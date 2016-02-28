@@ -12,10 +12,12 @@ var wysihtmlBone;
     // function for setting different text editor for different viewport size
     function resize() {
         if ($window.width() < 640) {
+            // small screen
             wysihtmlBone = '<div id="content_wysihtml_toolbar" class="wysihtml-toolbar" style="display: none;"> <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="bold"><i class="fa fa-bold"></i></button> <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="italic"><i class="fa fa-italic"></i></button> <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="underline"><i class="fa fa-underline"></i></button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"><span class="red">&nbsp;</span></button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"><span class="green">&nbsp;</span></button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"><span class="blue">&nbsp;</span></button> <button class="btn btn-default" data-wysihtml5-command="createLink" title="insert link"><i class="fa fa-link" unselectable="on"></i></button> <button type="submit" id="save_changes" class="btn btn-default pull-right" title="Save changes"><i class="fa fa-floppy-o"></i></button> <!-- <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button> --> <div data-wysihtml5-dialog="createLink" style="display: none;"> <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control"> <div class="pull-right"> <button class="btn btn-default" data-wysihtml5-dialog-action="cancel">Cancel</button> <button class="btn btn-primary" data-wysihtml5-dialog-action="save">OK</button> </div> </div></div><div id="content_wysihtml_editor" class="wysihtml-editor"></div>';
             return $html.removeClass('pull-right');
         }
-        wysihtmlBone = '<div id="content_wysihtml_toolbar" class="wysihtml-toolbar" style="display:none"> <div class="row toolbar-main"> <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="bold"><i class="fa fa-bold"></i></button> <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="italic"><i class="fa fa-italic"></i></button> <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="underline"><i class="fa fa-underline"></i></button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"> <span class="red">&nbsp;</span> </button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"> <span class="green">&nbsp;</span> </button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"> <span class="blue">&nbsp; </span> </button> <button class="btn btn-default" data-wysihtml5-command="createLink" title="insert link"><i class="fa fa-link"></i></button> <button class="btn btn-default" id="insert_img" title="Insert image"><i class="fa fa-picture-o"></i></button> <button class="btn btn-default" id="upload_file" title="Upload files"><i class="fa fa-files-o"></i></button> <button type="submit" class="btn btn-primary pull-right" id="save_changes" title="Save changes"><i class="fa fa-floppy-o"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button> <button type="submit" class="btn btn-default pull-right" id="content_view" title="View"><i class="fa fa-eye"></i></button> </div> <div data-wysihtml5-dialog="createLink" style="display:none" class="row"> <div class="input-group"> <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control"> <span class="input-group-btn"> <button class="btn btn-primary" data-wysihtml5-dialog-action="save" type="button">OK</button> </span> </div> </div> </div> <div id="content_wysihtml_editor" class="wysihtml-editor"> </div>';
+        // big screen
+        wysihtmlBone = '<div id="content_wysihtml_toolbar" class="wysihtml-toolbar" style="display:none"> <div class="row toolbar-main"> <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="bold"><i class="fa fa-bold"></i></button> <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="italic"><i class="fa fa-italic"></i></button> <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="underline"><i class="fa fa-underline"></i></button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"> <span class="red">&nbsp;</span> </button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"> <span class="green">&nbsp;</span> </button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"> <span class="blue">&nbsp; </span> </button> <button class="btn btn-default" data-wysihtml5-command="createLink" title="insert link" type="button"><i class="fa fa-link"></i></button> <button class="btn btn-default" data-wysihtml5-command="insertImage" id="insert_img" title="Insert image" type="button"><i class="fa fa-picture-o"></i></button> <button class="btn btn-default" id="upload_file" title="Upload files"><i class="fa fa-upload"></i></button> <a class="btn btn-default" href="/uploads" title="Manage files" target="_blank"><i class="fa fa-folder-open-o"></i></a> <button type="submit" class="btn btn-primary pull-right" id="save_changes" title="Save changes"><i class="fa fa-floppy-o"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button> <button type="submit" class="btn btn-default pull-right" id="content_view" title="View"><i class="fa fa-eye"></i></button> </div> <div data-wysihtml5-dialog="createLink" style="display:none" class="row"> <label for="link-url">Link URL</label> <div class="input-group"> <input id="link-url" data-wysihtml5-dialog-field="href" value="http://" class="text form-control"> <span class="input-group-btn"> <button class="btn btn-primary" data-wysihtml5-dialog-action="save" type="button">OK</button> </span> </div> </div> <div data-wysihtml5-dialog="insertImage" style="display:none" class="row"> <label for="img-url">Image URL</label> <div class="input-group"> <input id="img-url" class="form-control" data-wysihtml5-dialog-field="src" value="http://"> <span class="input-group-btn"> <button class="btn btn-primary" data-wysihtml5-dialog-action="save" type="button">OK</button> </span> </div> </div> </div> <div id="content_wysihtml_editor" class="wysihtml-editor"> </div>';
         $html.addClass('pull-right');
     }
 
@@ -113,8 +115,8 @@ function deleteSideItem () {
 
 
 // upload modal trigger
-$(document).on('click', '#insert_img', function(event) {
-        $('#upload_img_modal').modal('show');
+$(document).on('click', '#upload_file', function(event) {
+        $('#upload_file_modal').modal('show');
 });
 
 jQuery(document).ready(function($) {
@@ -122,7 +124,7 @@ jQuery(document).ready(function($) {
     $('.side-view-mode').hide();
     $('#save_changes').hide();
     $('#side_panel_modal').modal('hide');
-    $('#upload_img_modal').modal('hide');
+    $('#upload_file_modal').modal('hide');
 
     // global variables
     var txt = $('.editable').html();
@@ -266,8 +268,40 @@ jQuery(document).ready(function($) {
         isContentChanged = 0;
     });
 
-    // $('#btn_upload').click(function(event) {
-    //     $('#img_upload_frm').submit();
-    // });
+    $('#btn_upload').click(function(event) {
+        $('#img_uploading').show();
+        var form_data = new FormData($('#img_upload_frm')[0]);
+        $.ajax({
+            type: 'POST',
+            url: '/uploadajax',
+            data: form_data,
+            contentType: false,
+            processData: false,
+            dataType: 'json'
+        })
+        .done(function(data, textStatus, jqXHR) {
+            console.log(data);
+            console.log(textStatus);
+            console.log(jqXHR);
+            console.log("success");
+            $('#img_uploading').hide();
+            if (data.name == "invalid file") {
+                // $('#img_fail_uploading').show();
+                $('#upload_console_text').html('<p style="color: #DA2424;"><i class="fa fa-exclamation-triangle"></i>&nbsp;Invalid file!</p>')
+            }else{
+                // $('#img_done_uploading').show();
+                $('#upload_console_text').html('<p style="color: #1B8920;"><i class="fa fa-check-circle-o"></i>&nbsp;Upload successfully!</p>')
+            }
+        })
+        .fail(function() {
+            console.log("error");
+            $('#img_fail_uploading').show();
+        })
+        .always(function() {
+            console.log("complete");
+        });
+
+
+    });
 
 });
