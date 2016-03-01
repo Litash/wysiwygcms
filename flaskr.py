@@ -27,7 +27,7 @@ app.config.update(dict(
     DEBUG=True,
     SECRET_KEY='Yooo!',
     UPLOAD_FOLDER=UPLOAD_FOLDER,
-    MAX_CONTENT_LENGTH=16 * 1024 * 1024
+    MAX_CONTENT_LENGTH=10 * 1024 * 1024
 ))
 #     USERNAME='admin',
 #     PASSWORD='admin'
