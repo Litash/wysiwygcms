@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+####
+# Flask program for Chameleon content management system
+# Author: Yichen LU
+# Date: 2-Oct-2015
+####
+
 # all the imports
 import os
 import sqlite3
@@ -58,7 +64,6 @@ def teardown_request(exception):
 
 
 @app.route('/')
-# show_entries() <--- old class name
 def show_root():
     if isAuthenticated():
         return redirect(url_for('show_home'))
@@ -70,6 +75,63 @@ def show_root():
     return render_template('home.html', content=content, sideitem=sideitem)
 
 
+@app.route('/my_sites')
+def show_sites():
+    if not isAuthenticated():
+        return redirect(url_for('login'))
+    cur = g.db.execute('SELECT id, name, url FROM Site;')
+    sites = [dict(id=row[0], name=row[1], url=row[2]) for row in cur.fetchall()]
+
+    return render_template('my_sites.html', sites=sites)
+
+
+@app.route('/my_site/addsite', methods=['POST'])
+def add_site():
+    """
+    function for add a new site
+    """
+    if not session.get('logged_in'):
+        abort(401)
+
+    logging.info('--------------- method = %s', request.method)
+    logging.info(request)
+    siteName = request.form['siteName']
+    siteURL = request.form['siteURL']
+    # TODO: if exist, add; then fail
+    logging.info('---------- siteName = %s, siteURL = %s', siteName, siteURL)
+    cur = g.db.execute('SELECT * FROM Site;')
+    existSites = [dict(name=row[1], url=row[0]) for row in cur.fetchall()]
+    # if siteName in existSites:
+    #     abort(400) # return bad request code
+    logging.info(existSites)
+    g.db.execute('INSERT INTO Site (name, url) values (?, ?);',[siteName, siteURL])
+    g.db.commit()
+
+    # return jsonify(status=201, name=siteName, url=siteURL)
+    return redirect(url_for('show_sites'))
+
+
+# @app.route('/<siteName>')
+# def show_site(siteName):
+#     if session.get('username'):
+#         # uncomment following line and comment out above
+#         # to only allow staff to login
+#         # if session.get('username') and session['usercategory']=='staff':
+#         username = session['fullname']
+#     else:
+#         username = "null"
+
+#     url = '/'+siteName+'/home'
+#     logging.info("---------------- url = %s", url)
+#     cur = g.db.execute('SELECT content,url FROM Content WHERE url= ? ;', [url])
+#     content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
+
+#     cur = g.db.execute('SELECT id, url, item FROM SidePanel WHERE url= ? ORDER BY id DESC;' ,[url])
+#     sideitem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
+
+#     return render_template('home.html', content=content, sideitem=sideitem, username=username)
+
+
 @app.route('/home')
 def show_home():
 
@@ -79,13 +141,13 @@ def show_home():
         # if session.get('username') and session['usercategory']=='staff':
         username = session['fullname']
     else:
-        username = "SoooooSad"
+        username = "null"
 
     cur = g.db.execute('SELECT content,url FROM contents WHERE url="/home";')
     content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
 
-    cur = g.db.execute('SELECT item,id FROM sidepanel ORDER BY id DESC;')
-    sideitem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
+    cur = g.db.execute('SELECT id, url, item FROM sidepanel ORDER BY id DESC;')
+    sideitem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
 
     return render_template('home.html', content=content, sideitem=sideitem, username=username)
 
@@ -101,13 +163,13 @@ def add_entry():
     return redirect(url_for('show_home'))
 
 
-@app.route('/update', methods=['GET', 'POST', 'PUT'])
+@app.route('/update', methods=['POST'])
 def update_content():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
-    logContent = request.args['content']
-    logUrl = request.args['url']
+    logContent = request.form['content']
+    logUrl = request.form['url']
     logging.info('---------- update content -------- %s', logContent)
     logging.info('---------- update URL -------- %s', logUrl)
     g.db.execute('UPDATE contents SET content = ? WHERE url = ?;',
@@ -117,17 +179,18 @@ def update_content():
     return redirect(url_for('show_home'))
 
 
-@app.route('/createside', methods=['GET', 'POST', 'PUT'])
+@app.route('/createside', methods=['POST'])
 def create_side():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
-    logItem = request.args['item']
+    item = request.args['item']
+    url = request.args['url']
 
-    logging.info('---------- update item -------- %s', logItem)
+    logging.info('---------- update item -------- %s', item)
 
-    g.db.execute('INSERT INTO sidepanel (item) VALUES (?);',
-                 [logItem])
+    g.db.execute('INSERT INTO SidePanel (item, url) VALUES (?, ?);',
+                 [item, url])
     g.db.commit()
     # flash('')
     return redirect(url_for('show_home'))
@@ -364,4 +427,4 @@ def uploaded_files():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    app.run(host='178.62.125.116')
+    app.run(host='178.62.125.116', port=5000)

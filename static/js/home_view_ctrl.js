@@ -1,5 +1,5 @@
 /*
-** JavaScript to control behaviour of the CMS
+** JavaScript to control home layout behaviours on Chameleon CMS
 ** Author: Yichen Lu
 */
 
@@ -33,16 +33,18 @@ sideEditor = new wysihtml5.Editor('side_wysihtml_editor', {
 var isContentChanged = 0;
 var sideitem;
 var sideIsChanged = 0;
-var updateItemId;
+var updateItemId; // id of selected side item
+var sideItemUrl; // url for side items on current page
 var isNewSideItem = 0;
 
+// setup important values for side panel item on click
 $(document).on('click', '.side-panel li.list-hover', function(event) {
     event.preventDefault();
     isNewSideItem = 0
     sideitem = $(this).html();
     setModalValue (sideitem);
     updateItemId = getItemID($(this));
-
+    // sideItemUrl =
     $('#side_delete_item').show();
 });
 

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../static/img/favicon.ico">
+    <title>My Sites</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+    <!-- Bootstrap core CSS -->
+    <link href="../static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <link href="../static/css/cover.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+</head>
+
+<body>
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+                <div class="masthead clearfix">
+                    <div class="inner">
+                        <h3 class="masthead-brand">Chameleon CMS</h3>
+                        <!-- <nav>
+                            <ul class="nav masthead-nav">
+                                <li class="active"><a href="#">New site</a></li>
+                                <li><a href="#">Delete site</a></li>
+                            </ul>
+                        </nav> -->
+                    </div>
+                </div>
+                <div class="inner cover">
+                    <h1 class="cover-heading">Manage your sites</h1>
+                    <p class="lead">Choose existing site</p>
+                    <p class="lead">OR</p>
+                    <p class="lead">
+                        <button class="btn btn-lg btn-default" data-toggle="modal" data-target="#newSiteModal">Add New</button>
+                    </p>
+                </div>
+                <div class="inner">
+                    <ul class="list-group">
+                        {% for s in sites %}
+                        <li class="list-group-item" id="site_item_{{ s.id }}">
+                            <a href="{{ s.url | safe }}">{{ s.name | safe }}</a>
+                            <span class="btn pull-right delete-site"><i class="fa fa-minus-circle delete-site"></i></span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="mastfoot">
+                    <div class="inner">
+                        <p>Chameleon Content Management System, by <a href="http://yichen.lu">Yichen Lu</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="newSiteModal" tabindex="-1" role="dialog" aria-labelledby="newSiteModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add New Site</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="create_site_frm" action="/my_site/addsite" method="post">
+                        <div class="form-group">
+                            <label for="siteName">Site name</label>
+                            <input type="text" class="form-control" name="siteName" id="siteName" placeholder="Site name   e.g. mysite">
+                        </div>
+                        <div class="form-group">
+                            <label for="siteURL">URL</label>
+                            <input type="text" class="form-control" name="siteURL" id="siteURL" placeholder="Start with '/'   e.g. /mysite ">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="btn_create_site" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../static/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Custome js -->
+    <script src="../static/js/site_view_ctrl.js"></script>
+</body>
+
+</html>
