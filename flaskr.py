@@ -24,7 +24,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'TXT', 'pdf', 'PDF',
 # Load default config and override config from an environment variable
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'flaskr.db'),
-    DEBUG=True,
+    DEBUG=False,
     SECRET_KEY='Yooo!',
     UPLOAD_FOLDER=UPLOAD_FOLDER,
     MAX_CONTENT_LENGTH=10 * 1024 * 1024
@@ -364,4 +364,4 @@ def uploaded_files():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    app.run(host='178.62.125.116')
+    app.run(host='0.0.0.0', port=8080)
