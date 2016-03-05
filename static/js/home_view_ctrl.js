@@ -24,6 +24,17 @@ var wysihtmlBone;
     $window.resize(resize).trigger('resize');
 })(jQuery);
 
+
+// activate menu item
+var url = window.location.href;
+var splitURL = url.split('/');
+var jointURL = "/"+splitURL[3]+"/"+splitURL[4]+"/"+splitURL[5];
+$('#menu-items ul.nav.navbar-nav li a').each(function(index, el) {
+    if ($(el).attr('href')==jointURL) {
+        $(el).parent('li').addClass('active');
+    }
+});
+
 // code for side panel editor, need to be initialized before doeument ready
 sideEditor = new wysihtml5.Editor('side_wysihtml_editor', {
     toolbar: 'side_wysihtml_toolbar',
@@ -118,10 +129,11 @@ function deleteSideItem () {
 
 // upload modal trigger
 $(document).on('click', '#upload_file', function(event) {
-        $('#upload_file_modal').modal('show');
+    $('#upload_file_modal').modal('show');
 });
 
 jQuery(document).ready(function($) {
+
     // hide some elements when initialized
     $('.side-view-mode').hide();
     $('#save_changes').hide();
@@ -161,7 +173,8 @@ jQuery(document).ready(function($) {
         };
     });
 
-    function showTextEditor() {
+    // switch on text editor for page content
+    function openTextEditor() {
         $('.editable').html(wysihtmlBone)
         editor = new wysihtml5.Editor('content_wysihtml_editor', {
             toolbar: 'content_wysihtml_toolbar',
@@ -192,11 +205,10 @@ jQuery(document).ready(function($) {
     }
 
     $('.editable').dblclick(function(event) {
-        showTextEditor();
+        openTextEditor();
     });
-
     $('#btn_editor_on').click(function(event) {
-        showTextEditor();
+        openTextEditor();
     });
 
     function onChange() {
@@ -239,6 +251,7 @@ jQuery(document).ready(function($) {
     // function for saving main content
     function saveContent() {
         var updateTxt = editor.getValue();
+        // console.log(updateTxt);
         // $.trim($('#content_wysihtml_editor').html());
         if (updateTxt=='') {
             if (confirm("You are about to save empty text, are you sure?")) {

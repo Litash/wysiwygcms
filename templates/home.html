@@ -5,7 +5,7 @@
         {% for content in content %}
         {{content.text | safe}}
         </div>
-        <form id="update_content" action="{{ url_for('update_content') }}" method="post">
+        <form id="update_content" action="/site/{{content.siteName}}/{{content.menu}}/update" method="post">
             <div class="row hidden" id="dump">
                 <input type="text" id="update_text" name="content">
                 <input type="text" id="update_url" name="url" value="{{content.url}}">

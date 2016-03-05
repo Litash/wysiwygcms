@@ -20,7 +20,8 @@ from flask.ext.autoindex import AutoIndex
 # create our little application
 app = Flask(__name__)
 
-
+SITE_NAME = ''
+MENU = ''
 UPLOAD_FOLDER = app.root_path + '/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'TXT', 'pdf', 'PDF',
                           'png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF',
@@ -30,7 +31,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'TXT', 'pdf', 'PDF',
 # Load default config and override config from an environment variable
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'flaskr.db'),
-    DEBUG=False,
+    DEBUG=True,
     SECRET_KEY='Yooo!',
     UPLOAD_FOLDER=UPLOAD_FOLDER,
     MAX_CONTENT_LENGTH=10 * 1024 * 1024
@@ -63,18 +64,6 @@ def teardown_request(exception):
         db.close()
 
 
-@app.route('/')
-def show_root():
-    if isAuthenticated():
-        return redirect(url_for('show_home'))
-    cur = g.db.execute('SELECT content,url FROM contents WHERE url="/home";')
-    content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
-
-    cur = g.db.execute('SELECT item,id FROM sidepanel ORDER BY id DESC;')
-    sideitem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
-    return render_template('home.html', content=content, sideitem=sideitem)
-
-
 @app.route('/site')
 def show_sites():
     if not isAuthenticated():
@@ -83,6 +72,52 @@ def show_sites():
     sites = [dict(id=row[0], name=row[1], url=row[2]) for row in cur.fetchall()]
 
     return render_template('my_sites.html', sites=sites)
+
+
+@app.route('/site/<siteName>')
+def show_root(siteName):
+    if isAuthenticated():
+        return redirect(url_for('show_home', siteName=siteName, menu='home'))
+
+    url = "/site/"+siteName+'/home'
+    cur = g.db.execute('SELECT content,url FROM contents WHERE url=?;', [url])
+    content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
+
+    cur = g.db.execute('SELECT item,id FROM sidepanel ORDER BY id DESC;')
+    sideitem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
+
+    # update global variables
+    global SITE_NAME
+    SITE_NAME = siteName
+    return render_template('home.html', content=content, sideitem=sideitem)
+
+
+@app.route('/site/<siteName>/<menu>')
+def show_home(siteName, menu):
+
+    if session.get('username'):
+        # uncomment following line and comment out above
+        # to only allow staff to login
+        # if session.get('username') and session['usercategory']=='staff':
+        username = session['fullname']
+    else:
+        username = "null"
+
+    url = '/site/'+siteName+'/'+menu
+    logging.info('---------------- url = %s', url)
+    cur = g.db.execute('SELECT content,url FROM Content WHERE url=?;', [url])
+    content = [dict(text=row[0], url=row[1], siteName=siteName, menu=menu) for row in cur.fetchall()]
+    logging.info('---------------- content = %s', content)
+
+    cur = g.db.execute('SELECT id, url, item FROM sidepanel ORDER BY id DESC;')
+    sideitem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
+
+    # update global variables
+    global SITE_NAME
+    global MENU
+    SITE_NAME = siteName
+    MENU = menu
+    return render_template('home.html', content=content, sideitem=sideitem, username=username)
 
 
 @app.route('/site/addsite', methods=['POST'])
@@ -111,47 +146,6 @@ def add_site():
     return redirect(url_for('show_sites'))
 
 
-# @app.route('/<siteName>')
-# def show_site(siteName):
-#     if session.get('username'):
-#         # uncomment following line and comment out above
-#         # to only allow staff to login
-#         # if session.get('username') and session['usercategory']=='staff':
-#         username = session['fullname']
-#     else:
-#         username = "null"
-
-#     url = '/'+siteName+'/home'
-#     logging.info("---------------- url = %s", url)
-#     cur = g.db.execute('SELECT content,url FROM Content WHERE url= ? ;', [url])
-#     content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
-
-#     cur = g.db.execute('SELECT id, url, item FROM SidePanel WHERE url= ? ORDER BY id DESC;' ,[url])
-#     sideitem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
-
-#     return render_template('home.html', content=content, sideitem=sideitem, username=username)
-
-
-@app.route('/home')
-def show_home():
-
-    if session.get('username'):
-        # uncomment following line and comment out above
-        # to only allow staff to login
-        # if session.get('username') and session['usercategory']=='staff':
-        username = session['fullname']
-    else:
-        username = "null"
-
-    cur = g.db.execute('SELECT content,url FROM contents WHERE url="/home";')
-    content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
-
-    cur = g.db.execute('SELECT id, url, item FROM sidepanel ORDER BY id DESC;')
-    sideitem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
-
-    return render_template('home.html', content=content, sideitem=sideitem, username=username)
-
-
 @app.route('/add', methods=['POST'])
 def add_entry():
     if not session.get('logged_in'):
@@ -163,8 +157,8 @@ def add_entry():
     return redirect(url_for('show_home'))
 
 
-@app.route('/update', methods=['POST'])
-def update_content():
+@app.route('/site/<siteName>/<menu>/update', methods=['POST'])
+def update_content(siteName, menu):
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
@@ -172,11 +166,11 @@ def update_content():
     logUrl = request.form['url']
     logging.info('---------- update content -------- %s', logContent)
     logging.info('---------- update URL -------- %s', logUrl)
-    g.db.execute('UPDATE contents SET content = ? WHERE url = ?;',
+    g.db.execute('UPDATE Content SET content = ? WHERE url = ?;',
                  [logContent, logUrl])
     g.db.commit()
     # flash('')
-    return redirect(url_for('show_home'))
+    return redirect(url_for('show_home', siteName=siteName, menu=menu))
 
 
 @app.route('/createside', methods=['POST'])
@@ -234,7 +228,7 @@ def login():
         logging.warning("----- isAuthenticated -----")
         session['logged_in'] = True
         # recordAuthenticatedUser()
-        return redirect(url_for('show_home'))
+        return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
     # Else if the GET parameter csticket is empty this is a new user who
     # we need to send for authentication.
@@ -251,7 +245,7 @@ def login():
     else:
         recordAuthenticatedUser()
         session['logged_in'] = True
-        return redirect(url_for('show_home'))
+        return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
 # =================================
 # ============== CAS ==============
