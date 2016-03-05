@@ -428,7 +428,7 @@ def uploaded_files():
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
 <<<<<<< HEAD
-
+    app.run(host='178.62.125.116', port=5000)
 =======
     app.run(host='0.0.0.0', port=5000)
 >>>>>>> cur-improve
