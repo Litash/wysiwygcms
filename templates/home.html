@@ -19,14 +19,14 @@
             </div>
             <br>
         </form>
-        <form id="update_side" action="{{ url_for('update_side') }}" action="post">
+        <form id="update_side" action="{{ url_for('update_side') }}" method="post">
             <div class="row hidden" id="dump">
                 <input type="text" id="side_update_text" name="item">
                 <input type="text" id="side_update_id" name="id">
             </div>
             <br>
         </form>
-        <form id="delete_side" action="{{ url_for('delete_side') }}" action="post">
+        <form id="delete_side" action="{{ url_for('delete_side') }}" method="post">
             <div class="row hidden" id="dump">
                 <input type="text" id="side_delete_id" name="id">
             </div>

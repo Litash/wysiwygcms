@@ -75,7 +75,7 @@ def show_root():
     return render_template('home.html', content=content, sideitem=sideitem)
 
 
-@app.route('/my_sites')
+@app.route('/site')
 def show_sites():
     if not isAuthenticated():
         return redirect(url_for('login'))
@@ -85,7 +85,7 @@ def show_sites():
     return render_template('my_sites.html', sites=sites)
 
 
-@app.route('/my_site/addsite', methods=['POST'])
+@app.route('/site/addsite', methods=['POST'])
 def add_site():
     """
     function for add a new site
@@ -201,8 +201,8 @@ def update_side():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
-    logItem = request.args['item']
-    logID = request.args['id']
+    logItem = request.form['item']
+    logID = request.form['id']
     logging.info('---------- update item -------- %s', logItem)
     logging.info('---------- update id -------- %s', logID)
     g.db.execute('UPDATE sidepanel SET item = ? WHERE id = ?;',
@@ -217,7 +217,7 @@ def delete_side():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
-    logID = request.args['id']
+    logID = request.form['id']
     logging.info('---------- update content -------- %s', logID)
     g.db.execute('DELETE FROM sidepanel WHERE id = ?;',
                  [logID])
