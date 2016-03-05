@@ -159,8 +159,8 @@ jQuery(document).ready(function($) {
         };
     });
 
-    $('.editable').dblclick(function(event) {
-        $(this).html(wysihtmlBone)
+    function showTextEditor() {
+        $('.editable').html(wysihtmlBone)
         editor = new wysihtml5.Editor('content_wysihtml_editor', {
             toolbar: 'content_wysihtml_toolbar',
             parserRules: wysihtml5ParserRules // defined in file parser rules javascript
@@ -187,6 +187,14 @@ jQuery(document).ready(function($) {
             };
             isContentChanged = 0;
         });
+    }
+
+    $('.editable').dblclick(function(event) {
+        showTextEditor();
+    });
+
+    $('#btn_editor_on').click(function(event) {
+        showTextEditor();
     });
 
     function onChange() {
