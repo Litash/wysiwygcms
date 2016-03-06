@@ -49,8 +49,8 @@
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <!-- {% if session.logged_in %}
-                        <a href="#" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
-                        <a href="#" class="side-view-mode"><i title="Go to view" class="fa fa-eye"></i></a>
+                        <a href="javascript:;" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
+                        <a href="javascript:;" class="side-view-mode"><i title="Go to view" class="fa fa-eye"></i></a>
                         {% endif %} -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-items" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
@@ -58,7 +58,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand visible-sm-inline visible-xs-inline">COMP61011</a>
+                    <a href="javascript:;" class="navbar-brand visible-sm-inline visible-xs-inline">COMP61011</a>
                 </div>
                 <div class="row visible-sm-inline visible-xs-inline">Foundations of Machine Learning</div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -68,7 +68,7 @@
                         <li><a href="{{i.url}}">{{i.item}}</a></li>
                     {% endfor %}
                     {% if session.logged_in %}
-                        <li><a><i class="fa fa-plus fa-2"></i></a></li>
+                        <li><a href="javascript:;"><i class="fa fa-plus fa-2"></i></a></li>
                     {% endif %}
                     </ul>
                     <!-- <form class="navbar-form navbar-left" role="search">
@@ -82,7 +82,7 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a id="btn_editor_on">Edit</a></li>
+                                <li><a href="javascript:;" id="btn_editor_on">Edit</a></li>
                                 <li><a href="{{url_for('show_sites')}}">My Sites</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{url_for('logout')}}">Logout</a></li>
@@ -103,8 +103,8 @@
                     <div class="panel-heading">
                         <span>IMPORTANT</span> {% if session.logged_in %}
                         <div class="pull-right">
-                            <a class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
-                            <a class="side-view-mode"><i title="Go to view" class="fa fa-eye"></i></a>
+                            <a href="javascript:;" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
+                            <a href="javascript:;" class="side-view-mode"><i title="Go to view" class="fa fa-eye"></i></a>
                         </div>
                         {% endif %}
                     </div>

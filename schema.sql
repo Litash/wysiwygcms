@@ -2,6 +2,7 @@ drop table if exists Site;
 create table Site (
     id integer primary key autoincrement,
     name text not null,
+    title text not null,
     url text not null
 );
 

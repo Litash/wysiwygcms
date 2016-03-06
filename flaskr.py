@@ -126,7 +126,7 @@ def show_home(siteName, menu):
 
     # get menu item for this site
     cur = g.db.execute('SELECT idx, item, url FROM Menu WHERE siteName = ? ORDER BY idx;'
-        , [SITE_NAME])
+        , [siteName])
     menuList = [dict(idx=row[0], item=row[1], url=row[2]) for row in cur.fetchall()]
     logging.info("------------- menuList = %s", menuList)
     cur = g.db.execute('SELECT id, url, item FROM sidepanel ORDER BY id DESC;')
