@@ -1,12 +1,11 @@
-insert into site(name, url)
-values ('COMP61012', '/COMP61012');
-insert into site(name, url)
-values ('COMP24113', '/COMP24113');
-insert into site(name, url)
-values ('COMP61014', '/COMP61014');
-insert into site(name, url)
-values ('COMP24115', '/COMP24115');
-insert into site(name, url)
-values ('COMP61016', '/COMP61016');
-insert into site(name, url)
-values ('COMP24117', '/COMP24117');
+insert into Menu (siteName, idx, item, url)
+values ("COMP61011", "0", "home", "/site/COMP61011/home");
+
+insert into Menu (siteName, idx, item, url)
+values ("COMP61011", "1", "Lectures", "/site/COMP61011/lectures");
+
+insert into Menu (siteName, idx, item, url)
+values ("COMP61011", "2", "Assessment", "/site/COMP61011/assessment");
+
+insert into Menu (siteName, idx, item, url)
+values ("COMP61011", "3", "Resources", "/site/COMP61011/resources");

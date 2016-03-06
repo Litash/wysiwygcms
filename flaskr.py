@@ -21,7 +21,8 @@ from flask.ext.autoindex import AutoIndex
 app = Flask(__name__)
 
 SITE_NAME = ''
-MENU = ''
+MENU = '' # current selected menu item
+MENU_LIST = [] # list of all menu items
 UPLOAD_FOLDER = app.root_path + '/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'TXT', 'pdf', 'PDF',
                           'png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF',
@@ -76,20 +77,34 @@ def show_sites():
 
 @app.route('/site/<siteName>')
 def show_root(siteName):
-    if isAuthenticated():
-        return redirect(url_for('show_home', siteName=siteName, menu='home'))
-
-    url = "/site/"+siteName+'/home'
-    cur = g.db.execute('SELECT content,url FROM contents WHERE url=?;', [url])
-    content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
-
-    cur = g.db.execute('SELECT item,id FROM sidepanel ORDER BY id DESC;')
-    sideitem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
+    # if isAuthenticated():
 
     # update global variables
     global SITE_NAME
+    # global MENU_LIST
     SITE_NAME = siteName
-    return render_template('home.html', content=content, sideitem=sideitem)
+    logging.info("---------------- show_root SITE_NAME = %s", SITE_NAME)
+    # MENU_LIST = menuList
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu='home'))
+
+    # # get content
+    # url = "/site/"+siteName+'/home'
+    # cur = g.db.execute('SELECT content,url FROM Content WHERE url=?;', [url])
+    # content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
+    # # get menu item for this site
+    # cur = g.db.execute('SELECT siteName, idx, item, url FROM Menu ORDER BY idx;')
+    # menuList = [dict(siteName=row[0], idx=row[1], item=row[2], url=row[3]) for row in cur.fetchall()]
+    # # get side items
+    # cur = g.db.execute('SELECT item,id FROM sidepanel ORDER BY id DESC;')
+    # sideitem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
+
+    # # update global variables
+    # global SITE_NAME
+    # global MENU_LIST
+    # SITE_NAME = siteName
+    # MENU_LIST = menuList
+
+    # return render_template('home.html', content=content, sideitem=sideitem, menuitem=MENU_LIST)
 
 
 @app.route('/site/<siteName>/<menu>')
@@ -109,21 +124,31 @@ def show_home(siteName, menu):
     content = [dict(text=row[0], url=row[1], siteName=siteName, menu=menu) for row in cur.fetchall()]
     logging.info('---------------- content = %s', content)
 
+    # get menu item for this site
+    cur = g.db.execute('SELECT idx, item, url FROM Menu WHERE siteName = ? ORDER BY idx;'
+        , [SITE_NAME])
+    menuList = [dict(idx=row[0], item=row[1], url=row[2]) for row in cur.fetchall()]
+    logging.info("------------- menuList = %s", menuList)
     cur = g.db.execute('SELECT id, url, item FROM sidepanel ORDER BY id DESC;')
     sideitem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
 
     # update global variables
     global SITE_NAME
     global MENU
+    global MENU_LIST
     SITE_NAME = siteName
     MENU = menu
-    return render_template('home.html', content=content, sideitem=sideitem, username=username)
+    MENU_LIST = menuList
+    logging.info("------------- MENU_LIST = %s", MENU_LIST)
+
+    return render_template('home.html', content=content, sideitem=sideitem, username=username, menuitem=MENU_LIST)
 
 
 @app.route('/site/addsite', methods=['POST'])
 def add_site():
     """
-    function for add a new site
+    function for add a new site.
+    When new site is created, create empty content for Home menu
     """
     if not session.get('logged_in'):
         abort(401)
@@ -134,15 +159,29 @@ def add_site():
     siteURL = request.form['siteURL']
     # TODO: if exist, add; then fail
     logging.info('---------- siteName = %s, siteURL = %s', siteName, siteURL)
-    cur = g.db.execute('SELECT * FROM Site;')
-    existSites = [dict(name=row[1], url=row[0]) for row in cur.fetchall()]
-    # if siteName in existSites:
-    #     abort(400) # return bad request code
-    logging.info(existSites)
+
+    # logging.info(existSites)
     g.db.execute('INSERT INTO Site (name, url) values (?, ?);',[siteName, siteURL])
+    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/home"])
+    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/home"])
+    # g.db.execute('INSERT INTO Content (content, url) values ("", ?);',[siteURL+"/lectures"])
+    # g.db.execute('INSERT INTO Content (content, url) values ("", ?);',[siteURL+"/assessment"])
+    # g.db.execute('INSERT INTO Content (content, url) values ("", ?);',[siteURL+"/resources"])
     g.db.commit()
 
     # return jsonify(status=201, name=siteName, url=siteURL)
+    return redirect(url_for('show_sites'))
+
+
+@app.route('/site/deletesite', methods=['POST'])
+def delete_site():
+    if not session.get('logged_in'):
+        abort(401)
+    # siteName = request.form['siteName']
+    siteURL = request.form['url']
+
+    g.db.execute('DELETE FROM Site WHERE url=?', [siteURL])
+    g.db.commit()
     return redirect(url_for('show_sites'))
 
 
@@ -170,7 +209,7 @@ def update_content(siteName, menu):
                  [logContent, logUrl])
     g.db.commit()
     # flash('')
-    return redirect(url_for('show_home', siteName=siteName, menu=menu))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
 
 @app.route('/createside', methods=['POST'])

@@ -6,11 +6,19 @@
 jQuery(document).ready(function($) {
     $('#siteURL').focus(function(event) {
         var siteName = $('#siteName').val();
-        $(this).val('/'+siteName);
+        $(this).val('/site/'+siteName);
     });
     $('#btn_create_site').click(function(event) {
         event.preventDefault();
         $('#create_site_frm').submit();
     });
 
+
+    $('.delete-site').click(function(event) {
+        var siteName = $(this).siblings('a').text();
+        if (confirm("Confirm to delete this site? ")) {
+            $('#delete_site_url').val($(this).siblings('a').attr('href'));
+            $('#delete_site_frm').submit();
+        }
+    });
 });
