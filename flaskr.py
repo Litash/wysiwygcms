@@ -155,7 +155,7 @@ def show_home(siteName, menu):
     return render_template('home.html', title=SITE_TITLE, content=content, sideitem=sideitem, username=username, menuitem=MENU_LIST)
 
 
-@app.route('/site/addsite', methods=['POST'])
+@app.route('/site/add_site', methods=['POST'])
 def add_site():
     """
     function for add a new site.
@@ -185,7 +185,7 @@ def add_site():
     return redirect(url_for('show_sites'))
 
 
-@app.route('/site/deletesite', methods=['POST'])
+@app.route('/site/delete_site', methods=['POST'])
 def delete_site():
     if not session.get('logged_in'):
         abort(401)
@@ -196,6 +196,18 @@ def delete_site():
     g.db.execute('DELETE FROM Menu WHERE url LIKE ?', [siteURL+'%'])
     g.db.commit()
     return redirect(url_for('show_sites'))
+
+
+@app.route('/site/update_site_title', methods=['POST'])
+def update_site_title():
+    if not session.get('logged_in'):
+        abort(401)
+    # siteName = request.form['siteName']
+    siteTitle = request.form['title']
+    siteURL = "/site/"+SITE_NAME
+    g.db.execute('UPDATE Site SET title = ? WHERE url = ?', [siteTitle, siteURL])
+    g.db.commit()
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
 
 @app.route('/add_menu_item', methods=['POST'])

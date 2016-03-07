@@ -323,3 +323,11 @@ header {
 .x-menu-item{
     margin-left: 4px;
 }
+
+/*
+** Style for title editing elements
+*/
+
+.title-editor {
+    width: 100%;
+}

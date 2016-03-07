@@ -38,10 +38,26 @@
                     </div>
                 </div>
                 <div class="col-sm-10">
-                    <span class="page-title">
+                    <span class="page-title" id="page_title">
                         {% for t in title %}
                             {{ t.title | safe}}
                         {% endfor %}
+                    </span>
+                    <span>
+                        <form class="form-inline" id="title_edit_frm" action="{{url_for('update_site_title')}}" method="post" style="display: none;">
+                            <div class="form-group title-editor">
+                                <div class="input-group title-editor">
+                                    <input type="text" class="form-control" id="title_txt" name="title">
+                                    <span class="input-group-btn">
+                                        <button id="btn_edit_title_x" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
+                                        <button id="btn_edit_title_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                    </span>
+                                </div>
+                                <!-- <div style="display: none;">
+                                    <input type="text" id="title_edit_url" name="url">
+                                </div> -->
+                            </div>
+                        </form>
                     </span>
                 </div>
             </div>
