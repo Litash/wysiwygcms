@@ -13,7 +13,6 @@ jQuery(document).ready(function($) {
         $('#create_site_frm').submit();
     });
 
-
     $('.delete-site').click(function(event) {
         var siteName = $(this).siblings('a').text();
         if (confirm("Confirm to delete this site? ")) {

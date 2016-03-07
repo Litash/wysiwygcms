@@ -26,13 +26,40 @@ var wysihtmlBone;
 
 
 // activate menu item
-var url = window.location.href;
-var splitURL = url.split('/');
-var jointURL = "/"+splitURL[3]+"/"+splitURL[4]+"/"+splitURL[5];
+var url = $('input#page_url').val();
+// var splitURL = url.split('/');
+// var jointURL = "/"+splitURL[3]+"/"+splitURL[4]+"/"+splitURL[5];
 $('#menu-items ul.nav.navbar-nav li a').each(function(index, el) {
-    if ($(el).attr('href')==jointURL) {
+    if ($(el).attr('href')==url) {
         $(el).parent('li').addClass('active');
     }
+});
+
+// function for menu editing
+// var menuInlineFrm = '<form class="form-inline menu-add-frm" id="menu_add_frm"> <div class="form-group"> <label class="sr-only" for="menuNewItem">Amount (in dollars)</label> <div class="input-group"> <input class="form-control" id="nm_item" placeholder="Amount"> <span class="input-group-btn"><button id="btn_add_menu_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button></span> </div> </div> </form>'
+// var menuPlusIcon = '<a id="add_menu_item" href="javascript:;"><i class="fa fa-plus fa-2"></i></a>'
+// $('form#menu_add_frm').hide();
+$(document).on('click', 'a#add_menu_item', function(event) {
+    event.preventDefault();
+    $('form#menu_add_frm').show();
+    $('a#add_menu_item').hide();
+
+    $('#btn_add_menu_check').click(function(event) {
+        var idx = $('#menu_editable li').length - 1;
+        // var siteName = $('input#siteName').val();
+        var menuTxt = $('input#nm_item')
+        // var menuURL = url + "/"+ menuTxt.toString().toLowerCase();
+        // $('input#nm_url').val(menuURL);
+        // $('input#nm_site_name').val(siteName);
+        $('input#nm_idx').val(idx);
+
+        if (menuTxt!="") {
+            $('form#menu_add_frm').submit();
+        }
+
+        $('form#menu_add_frm').hide();
+        $('a#add_menu_item').show();
+    });
 });
 
 // code for side panel editor, need to be initialized before doeument ready
@@ -59,7 +86,7 @@ $(document).on('click', '.side-panel li.list-hover', function(event) {
     $('#side_delete_item').show();
 });
 
-// add item
+// add side panel item
 $(document).on('click', 'li.list-group-item.add-list-item', function(event) {
     event.preventDefault();
     isNewSideItem = 1;
@@ -135,17 +162,50 @@ $(document).on('click', '#upload_file', function(event) {
 jQuery(document).ready(function($) {
 
     // hide some elements when initialized
-    $('.side-view-mode').hide();
     $('#save_changes').hide();
     $('#side_panel_modal').modal('hide');
     $('#upload_file_modal').modal('hide');
+
+    // switch for menu, content text editor and side panel
+    $('a#btn_edit_on').click(function(event) {
+        openTextEditor();
+        $('a#add_menu_item').show();
+        view2Edit ();
+    });
+    $('a#btn_edit_off').click(function(event) {
+        $('a#add_menu_item').hide();
+        // control content
+        if (isContentChanged==1) {
+            if (confirm("You have made some changes, do you want to save it?")) {
+                saveContent();
+            } else{
+                $('.editable').html(txt);
+            };
+        }else{
+            $('.editable').html(txt);
+        };
+        isContentChanged = 0;
+        // control side panel
+        if (sideIsChanged==1) {
+            if (confirm("You have made some changes, do you want to save it?")) {
+                saveContent();
+                saveSideItem()
+            } else{
+                edit2View ();
+            };
+        }else{
+            edit2View ();
+        };
+        // isContentChanged = 0;
+        sideIsChanged=0;
+    });
 
     // global variables
     var txt = $('.editable').html();
     var editor;
 
     // code for wysihtml editor and start edit mode
-    $('.side-edit-mode').on('click', function(event) {
+    $('a.side-edit-mode').on('click', function(event) {
         event.preventDefault();
         view2Edit ();
 
@@ -158,10 +218,26 @@ jQuery(document).ready(function($) {
         // editor.setValue(txt, true);
         // editor.on("change", onChange);
 
-        $('.side-view-mode').show();
+        $('a.side-view-mode').show();
         $(this).hide();
 
 
+    });
+    // mode ctrl
+    $('.side-view-mode').on('click', function(event) {
+        event.preventDefault();
+        if (sideIsChanged==1) {
+            if (confirm("You have made some changes, do you want to save it?")) {
+                saveContent();
+                saveSideItem()
+            } else{
+                edit2View ();
+            };
+        }else{
+            edit2View ();
+        };
+        // isContentChanged = 0;
+        sideIsChanged=0;
     });
 
     $('#side_save_changes').on('click', function(event) {
@@ -204,33 +280,14 @@ jQuery(document).ready(function($) {
         });
     }
 
+    // trigger for content text editor
     $('.editable').dblclick(function(event) {
-        openTextEditor();
-    });
-    $('#btn_editor_on').click(function(event) {
         openTextEditor();
     });
 
     function onChange() {
         isContentChanged = 1;
     }
-
-    // mode ctrl
-    $('.side-view-mode').on('click', function(event) {
-        event.preventDefault();
-        if (sideIsChanged==1) {
-            if (confirm("You have made some changes, do you want to save it?")) {
-                saveContent();
-                saveSideItem()
-            } else{
-                edit2View ();
-            };
-        }else{
-            edit2View ();
-        };
-        // isContentChanged = 0;
-        sideIsChanged=0;
-    });
 
     function view2Edit () {
         $('.side-view-mode').show();
@@ -291,6 +348,8 @@ jQuery(document).ready(function($) {
         isContentChanged = 0;
     });
 
+
+    // function for file upload
     $('#btn_upload').click(function(event) {
         $('#img_uploading').show();
         var form_data = new FormData($('#img_upload_frm')[0]);
@@ -328,5 +387,7 @@ jQuery(document).ready(function($) {
     $('#img_upload_frm input[type=file]').click(function(event) {
         $('#upload_console_text').empty();
     });
+    // end of file upload
+
 
 });

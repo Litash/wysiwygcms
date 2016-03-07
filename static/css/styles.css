@@ -291,11 +291,19 @@ header {
 
 
 /*
-** miscellaneous
+** file uploading elements
 */
 
 #upload_console_icon img {
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+
+
+/*
+** menu editing elements
+*/
+.menu-add-frm {
+    margin-top: 8px;
 }

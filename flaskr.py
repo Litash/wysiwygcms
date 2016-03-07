@@ -20,8 +20,9 @@ from flask.ext.autoindex import AutoIndex
 # create our little application
 app = Flask(__name__)
 
-SITE_NAME = ''
-MENU = '' # current selected menu item
+SITE_NAME = ""
+SITE_TITLE = ""
+MENU = "" # current selected menu item
 MENU_LIST = [] # list of all menu items
 UPLOAD_FOLDER = app.root_path + '/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'TXT', 'pdf', 'PDF',
@@ -119,29 +120,37 @@ def show_home(siteName, menu):
         username = "null"
 
     url = '/site/'+siteName+'/'+menu
-    logging.info('---------------- url = %s', url)
+    # logging.info('---------------- url = %s', url)
+    # get site title
+    cur = g.db.execute('SELECT title from Site where name= ?', [siteName])
+    # logging.info("------------- site title = %s", cur.fetchall())
+    siteTitle = [dict(title=row[0]) for row in cur.fetchall()]
+
+    # get content
     cur = g.db.execute('SELECT content,url FROM Content WHERE url=?;', [url])
     content = [dict(text=row[0], url=row[1], siteName=siteName, menu=menu) for row in cur.fetchall()]
-    logging.info('---------------- content = %s', content)
-
+    # logging.info('---------------- content = %s', content)
     # get menu item for this site
     cur = g.db.execute('SELECT idx, item, url FROM Menu WHERE siteName = ? ORDER BY idx;'
         , [siteName])
     menuList = [dict(idx=row[0], item=row[1], url=row[2]) for row in cur.fetchall()]
-    logging.info("------------- menuList = %s", menuList)
+    # logging.info("------------- menuList = %s", menuList)
+    # get side panel items
     cur = g.db.execute('SELECT id, url, item FROM sidepanel ORDER BY id DESC;')
     sideitem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
 
     # update global variables
     global SITE_NAME
+    global SITE_TITLE
     global MENU
     global MENU_LIST
     SITE_NAME = siteName
+    SITE_TITLE = siteTitle
     MENU = menu
     MENU_LIST = menuList
     logging.info("------------- MENU_LIST = %s", MENU_LIST)
 
-    return render_template('home.html', content=content, sideitem=sideitem, username=username, menuitem=MENU_LIST)
+    return render_template('home.html', title=SITE_TITLE, content=content, sideitem=sideitem, username=username, menuitem=MENU_LIST)
 
 
 @app.route('/site/addsite', methods=['POST'])
@@ -185,15 +194,32 @@ def delete_site():
     return redirect(url_for('show_sites'))
 
 
-@app.route('/add', methods=['POST'])
-def add_entry():
-    if not session.get('logged_in'):
-        abort(401)
-    g.db.execute('insert into entries (title, text) values (?, ?)',
-                 [request.form['title'], request.form['text']])
+@app.route('/add_menu_item', methods=['POST'])
+def add_menu_item():
+    # siteName = request.form['siteName']
+    idx = request.form['idx']
+    item = request.form['item']
+    siteName = SITE_NAME
+    url = "/site/"+siteName+"/"+item.strip()
+    # url = request.form['url']
+    logging.info("-------------- new menu item = %s", item)
+    logging.info("-------------- new menu idx = %s", idx)
+    logging.info("-------------- new menu url = %s", url)
+    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',
+        [siteName, idx, item, url])
     g.db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('show_home'))
+
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
+
+# @app.route('/add', methods=['POST'])
+# def add_entry():
+#     if not session.get('logged_in'):
+#         abort(401)
+#     g.db.execute('insert into entries (title, text) values (?, ?)',
+#                  [request.form['title'], request.form['text']])
+#     g.db.commit()
+#     flash('New entry was successfully posted')
+#     return redirect(url_for('show_home'))
 
 
 @app.route('/site/<siteName>/<menu>/update', methods=['POST'])

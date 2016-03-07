@@ -5,6 +5,10 @@
         {% for content in content %}
         {{content.text | safe}}
         </div>
+        <div id="key_site_info" class="hidden">
+            <input type="text" id="siteName" value="{{content.siteName}}">
+            <input type="text" id="page_url" value="{{content.url}}">
+        </div>
         <form id="update_content" action="/site/{{content.siteName}}/{{content.menu}}/update" method="post">
             <div class="row hidden" id="dump">
                 <input type="text" id="update_text" name="content">
