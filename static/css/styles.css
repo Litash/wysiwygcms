@@ -307,3 +307,19 @@ header {
 .menu-add-frm {
     margin-top: 8px;
 }
+
+#nm_item {
+    width: 135px;
+}
+
+.menu-remover-cover {
+    position: absolute;
+    z-index: 999;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+
+.x-menu-item{
+    margin-left: 4px;
+}

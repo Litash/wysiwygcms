@@ -25,7 +25,7 @@ var wysihtmlBone;
 })(jQuery);
 
 
-// activate menu item
+// activate menu item based on url
 var url = $('input#page_url').val();
 // var splitURL = url.split('/');
 // var jointURL = "/"+splitURL[3]+"/"+splitURL[4]+"/"+splitURL[5];
@@ -36,32 +36,49 @@ $('#menu-items ul.nav.navbar-nav li a').each(function(index, el) {
 });
 
 // function for menu editing
-// var menuInlineFrm = '<form class="form-inline menu-add-frm" id="menu_add_frm"> <div class="form-group"> <label class="sr-only" for="menuNewItem">Amount (in dollars)</label> <div class="input-group"> <input class="form-control" id="nm_item" placeholder="Amount"> <span class="input-group-btn"><button id="btn_add_menu_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button></span> </div> </div> </form>'
-// var menuPlusIcon = '<a id="add_menu_item" href="javascript:;"><i class="fa fa-plus fa-2"></i></a>'
-// $('form#menu_add_frm').hide();
 $(document).on('click', 'a#add_menu_item', function(event) {
     event.preventDefault();
     $('form#menu_add_frm').show();
     $('a#add_menu_item').hide();
+});
+$('#btn_add_menu_check').click(function(event) {
+    var idx = $('#menu_editable li').length - 1;
+    var menuTxt = $('input#nm_item').val()
+    $('input#nm_idx').val(idx);
 
-    $('#btn_add_menu_check').click(function(event) {
-        var idx = $('#menu_editable li').length - 1;
-        // var siteName = $('input#siteName').val();
-        var menuTxt = $('input#nm_item').val()
-        // var menuURL = url + "/"+ menuTxt.toString().toLowerCase();
-        // $('input#nm_url').val(menuURL);
-        // $('input#nm_site_name').val(siteName);
-        $('input#nm_idx').val(idx);
+    if (menuTxt.length>0) {
+        $('form#menu_add_frm').submit();
+    }else{
+        alert("empty entry");
+    }
 
-        if (menuTxt.length>0) {
-            $('form#menu_add_frm').submit();
-        }else{
-            alert("empty entry");
-        }
+    $('form#menu_add_frm').hide();
+    $('a#add_menu_item').show();
+});
+$('#btn_add_menu_x').click(function(event) {
+   $('form#menu_add_frm').hide();
+   $('a#add_menu_item').show();
+});
 
-        $('form#menu_add_frm').hide();
-        $('a#add_menu_item').show();
-    });
+var minusClicked = 0;
+$(document).on('click', 'a#remove_menu_item', function(event) {
+    event.preventDefault();
+    if (!minusClicked) {
+        $('.nav-page-menu').append('<i class="fa fa-times-circle x-menu-item" style="color:#D50000;"></i>');
+        $('.nav-page-menu').parent('li').prepend('<span class="menu-remover-cover"></span>');
+        $('.menu-remover-cover').click(function(event) {
+            if (confirm("Comfirm to delete this menu item and corresponding page?")) {
+                $('#rm_item').val($(this).siblings('a').text());
+                $('#rm_item_url').val($(this).siblings('a').attr('href'));
+                $('#menu_remove_frm').submit();
+            }
+        });
+        minusClicked = 1;
+    }else{
+        $('.menu-remover-cover').remove();
+        $('.x-menu-item').remove();
+        minusClicked = 0;
+    }
 });
 
 // code for side panel editor, need to be initialized before doeument ready
@@ -162,7 +179,6 @@ $(document).on('click', '#upload_file', function(event) {
 });
 
 jQuery(document).ready(function($) {
-
     // hide some elements when initialized
     $('#save_changes').hide();
     $('#side_panel_modal').modal('hide');
@@ -170,13 +186,23 @@ jQuery(document).ready(function($) {
 
     // switch for menu, content text editor and side panel
     $('a#btn_edit_on').click(function(event) {
-        openTextEditor();
+        $('#btn_edit_on_li').hide()
+        $('#btn_edit_off_li').show()
+        // menu item editing
         $('a#add_menu_item').show();
+        $('a#remove_menu_item').show();
+        // content editing
+        openTextEditor();
+        // side panel editing
         view2Edit ();
     });
     $('a#btn_edit_off').click(function(event) {
+        $('#btn_edit_on_li').show()
+        $('#btn_edit_off_li').hide()
+        // menu
         $('a#add_menu_item').hide();
-        // control content
+        $('a#remove_menu_item').hide();
+        // content
         if (isContentChanged==1) {
             if (confirm("You have made some changes, do you want to save it?")) {
                 saveContent();
@@ -187,7 +213,7 @@ jQuery(document).ready(function($) {
             $('.editable').html(txt);
         };
         isContentChanged = 0;
-        // control side panel
+        // side panel
         if (sideIsChanged==1) {
             if (confirm("You have made some changes, do you want to save it?")) {
                 saveContent();

@@ -9,15 +9,14 @@
     <meta name="description" content="">
     <meta name="author" content="Yichen Lu">
     <link rel="icon" href="/static/img/favicon.ico">
-    <title>COMP61011: Foundations of Machine Learning</title>
+    <title>
+        {% for t in title %}
+            {{ t.title | safe}}
+        {% endfor %}
+    </title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!--[if lte IE 8]>
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
-    <![endif]-->
-    <!--[if gt IE 8]><!-->
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
-    <!--<![endif]-->
+
     <!-- Bootstrap core CSS -->
     <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles -->
@@ -39,7 +38,11 @@
                     </div>
                 </div>
                 <div class="col-sm-10">
-                    <span class="page-title">COMP61011: Foundations of Machine Learning</span>
+                    <span class="page-title">
+                        {% for t in title %}
+                            {{ t.title | safe}}
+                        {% endfor %}
+                    </span>
                 </div>
             </div>
         </header>
@@ -64,15 +67,17 @@
                 <div class="collapse navbar-collapse" id="menu-items">
                     <ul class="nav navbar-nav" id="menu_editable">
                         {% for i in menuitem %}
-                        <li><a href="{{i.url}}">{{i.item}}</a></li>
+                        <li><a class="nav-page-menu" href="{{i.url}}">{{i.item}}</a></li>
                         {% endfor %} {% if session.logged_in %}
                         <li id="add_menu_item_li">
                             <form class="form-inline menu-add-frm" id="menu_add_frm" action="{{url_for('add_menu_item')}}" method="post" style="display: none;">
                                 <div class="form-group">
-                                    <label class="sr-only" for="menuNewItem">Amount (in dollars)</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="nm_item" name="item">
-                                        <span class="input-group-btn"><button id="btn_add_menu_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button></span>
+                                        <span class="input-group-btn">
+                                            <button id="btn_add_menu_x" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
+                                            <button id="btn_add_menu_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                        </span>
                                     </div>
                                     <div class="input-group" style="display: none;">
                                         <input type="text" id="nm_idx" name="idx">
@@ -81,6 +86,13 @@
                             </form>
                             <a id="add_menu_item" href="javascript:;" style="display: none;"><i class="fa fa-plus fa-2"></i></a>
                         </li>
+                        <li id="remove_menu_item_li">
+                            <a id="remove_menu_item" href="javascript:;" style="display: none;"><i class="fa fa-minus fa-2"></i></a>
+                            <form id="menu_remove_frm" action="{{ url_for('remove_menu_item') }}" method="post" style="display: none;">
+                                <input type="text" id="rm_item" name="item"></input>
+                                <input type="text" id="rm_item_url" name="url"></itput>
+                            </form>
+                        </li>
                         {% endif %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -88,8 +100,8 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:;" id="btn_edit_on">Edit</a></li>
-                                <li><a href="javascript:;" id="btn_edit_off">View</a></li>
+                                <li id="btn_edit_on_li"><a href="javascript:;" id="btn_edit_on">Edit</a></li>
+                                <li id="btn_edit_off_li" style="display: none;"><a href="javascript:;" id="btn_edit_off">View</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{url_for('show_sites')}}">My Sites</a></li>
                                 <li role="separator" class="divider"></li>

@@ -125,6 +125,7 @@ def show_home(siteName, menu):
     cur = g.db.execute('SELECT title from Site where name= ?', [siteName])
     # logging.info("------------- site title = %s", cur.fetchall())
     siteTitle = [dict(title=row[0]) for row in cur.fetchall()]
+    logging.info("--------------- siteTitle = %s", siteTitle)
 
     # get content
     cur = g.db.execute('SELECT content,url FROM Content WHERE url=?;', [url])
@@ -149,6 +150,7 @@ def show_home(siteName, menu):
     MENU = menu
     MENU_LIST = menuList
     # logging.info("------------- MENU_LIST = %s", MENU_LIST)
+    logging.info("------------- SITE_NAME = %s", SITE_NAME)
 
     return render_template('home.html', title=SITE_TITLE, content=content, sideitem=sideitem, username=username, menuitem=MENU_LIST)
 
@@ -162,15 +164,16 @@ def add_site():
     if not session.get('logged_in'):
         abort(401)
 
-    logging.info('--------------- method = %s', request.method)
+    logging.info('--------------- NEW SITE: method = %s', request.method)
     logging.info(request)
+    siteTitle = request.form['siteTitle']
     siteName = request.form['siteName']
     siteURL = request.form['siteURL']
     # TODO: if exist, add; then fail
-    logging.info('---------- siteName = %s, siteURL = %s', siteName, siteURL)
+    logging.info('---------- NEW SITE: siteName = %s, siteURL = %s', siteName, siteURL)
 
     # logging.info(existSites)
-    g.db.execute('INSERT INTO Site (name, url) values (?, ?);',[siteName, siteURL])
+    g.db.execute('INSERT INTO Site (name, title, url) values (?, ?, ?);',[siteName, siteTitle, siteURL])
     g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/home"])
     g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/home"])
     # g.db.execute('INSERT INTO Content (content, url) values ("", ?);',[siteURL+"/lectures"])
@@ -190,6 +193,7 @@ def delete_site():
     siteURL = request.form['url']
 
     g.db.execute('DELETE FROM Site WHERE url=?', [siteURL])
+    g.db.execute('DELETE FROM Menu WHERE url LIKE ?', [siteURL+'%'])
     g.db.commit()
     return redirect(url_for('show_sites'))
 
@@ -207,7 +211,7 @@ def add_menu_item():
     logging.info("-------------- new menu item = %s", item)
     logging.info("-------------- new menu idx = %s", idx)
     logging.info("-------------- new menu url = %s", url)
-    if not item.strip():
+    if item.strip():
         g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',
             [siteName, idx, item, url])
         g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',
@@ -216,6 +220,20 @@ def add_menu_item():
 
     return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
+
+@app.route('/remove_menu_item', methods=['POST'])
+def remove_menu_item():
+    if not session.get('logged_in'):
+        abort(401)
+
+    item = request.form['item']
+    url = request.form['url']
+
+    g.db.execute('DELETE FROM Menu WHERE siteName=? AND item=? AND url=?;',
+        [SITE_NAME, item, url])
+    g.db.execute('DELETE FROM Content WHERE url=?;', [url])
+    g.db.commit()
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 # @app.route('/add', methods=['POST'])
 # def add_entry():
 #     if not session.get('logged_in'):
@@ -260,7 +278,7 @@ def create_side():
     return redirect(url_for('show_home'))
 
 
-@app.route('/updateside', methods=['GET', 'POST', 'PUT'])
+@app.route('/updateside', methods=['POST'])
 def update_side():
     if not session.get('logged_in'):
         abort(401)
@@ -276,7 +294,7 @@ def update_side():
     return redirect(url_for('show_home'))
 
 
-@app.route('/deleleside', methods=['GET', 'POST', 'PUT'])
+@app.route('/deleleside', methods=['POST'])
 def delete_side():
     if not session.get('logged_in'):
         abort(401)
