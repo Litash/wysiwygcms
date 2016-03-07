@@ -148,7 +148,7 @@ def show_home(siteName, menu):
     SITE_TITLE = siteTitle
     MENU = menu
     MENU_LIST = menuList
-    logging.info("------------- MENU_LIST = %s", MENU_LIST)
+    # logging.info("------------- MENU_LIST = %s", MENU_LIST)
 
     return render_template('home.html', title=SITE_TITLE, content=content, sideitem=sideitem, username=username, menuitem=MENU_LIST)
 
@@ -196,7 +196,9 @@ def delete_site():
 
 @app.route('/add_menu_item', methods=['POST'])
 def add_menu_item():
-    # siteName = request.form['siteName']
+    if not session.get('logged_in'):
+        abort(401)
+
     idx = request.form['idx']
     item = request.form['item']
     siteName = SITE_NAME
@@ -207,6 +209,8 @@ def add_menu_item():
     logging.info("-------------- new menu url = %s", url)
     g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',
         [siteName, idx, item, url])
+    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',
+        [url])
     g.db.commit()
 
     return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
