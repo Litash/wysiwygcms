@@ -207,11 +207,12 @@ def add_menu_item():
     logging.info("-------------- new menu item = %s", item)
     logging.info("-------------- new menu idx = %s", idx)
     logging.info("-------------- new menu url = %s", url)
-    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',
-        [siteName, idx, item, url])
-    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',
-        [url])
-    g.db.commit()
+    if not item.strip():
+        g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',
+            [siteName, idx, item, url])
+        g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',
+            [url])
+        g.db.commit()
 
     return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 

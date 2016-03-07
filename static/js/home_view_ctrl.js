@@ -47,14 +47,16 @@ $(document).on('click', 'a#add_menu_item', function(event) {
     $('#btn_add_menu_check').click(function(event) {
         var idx = $('#menu_editable li').length - 1;
         // var siteName = $('input#siteName').val();
-        var menuTxt = $('input#nm_item')
+        var menuTxt = $('input#nm_item').val()
         // var menuURL = url + "/"+ menuTxt.toString().toLowerCase();
         // $('input#nm_url').val(menuURL);
         // $('input#nm_site_name').val(siteName);
         $('input#nm_idx').val(idx);
 
-        if (menuTxt!="") {
+        if (menuTxt.length>0) {
             $('form#menu_add_frm').submit();
+        }else{
+            alert("empty entry");
         }
 
         $('form#menu_add_frm').hide();
