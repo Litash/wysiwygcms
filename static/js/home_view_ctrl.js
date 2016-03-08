@@ -463,10 +463,10 @@ var sideState = $('#side_state').val();
 console.log("sideState = "+sideState);
 if (sideState=="1") {
     $('#sidepanel_checkbox').bootstrapSwitch('state',true);
-    $('div.side-panel div.panel').show();
+    // $('div.side-panel div.panel').show();
 }else{
     $('#sidepanel_checkbox').bootstrapSwitch('state',false);
-    $('div.side-panel div.panel').hide();
+    // $('div.side-panel div.panel').hide();
 }
 
 $('#sidepanel_checkbox').on('switchChange.bootstrapSwitch', function(event, state) {

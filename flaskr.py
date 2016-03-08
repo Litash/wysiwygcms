@@ -139,6 +139,8 @@ def show_home(siteName, menu):
     # get side panel state
     cur = g.db.execute('SELECT state, title FROM SidePanelState WHERE url = ?',[url])
     sideState = [dict(state=row[0], title=row[1]) for row in cur.fetchall()]
+    logging.info("------------ side state = %s", sideState)
+
     # get side panel items
     cur = g.db.execute('SELECT id, url, item FROM SidePanelItem ORDER BY id DESC;')
     sideItem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]

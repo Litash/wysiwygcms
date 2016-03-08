@@ -151,9 +151,10 @@
         </nav>
         <div class="container-fluid ">
             <div class="side-panel col-sm-3 pull-right">
-                <div class="panel panel-info">
+            {% for s in sideState %}
+                {% if s.state==0 %}
+                    <div class="panel panel-info" style="display: none;">
                     <div class="panel-heading">
-                        {% for s in sideState %}
                             <span id="panel_title">{{ s.title | safe }}</span>
                             <span id="panel_title_edit_span" style="display: none;">
                                 <form class="form-inline" id="panel_title_edit_frm" action="{{url_for('update_side_title')}}" method="post">
@@ -171,7 +172,6 @@
                                     </div>
                                 </form>
                             </span>
-                        {% endfor %}
                     </div>
                     {% if session.logged_in %}
                     <div class="side-panel-icon panel-info">
@@ -189,7 +189,47 @@
                         </li>
                         {% endfor %}
                     </ul>
-                </div>
+                </div>    
+                {% else %}
+                    <div class="panel panel-info">
+                    <div class="panel-heading">
+                            <span id="panel_title">{{ s.title | safe }}</span>
+                            <span id="panel_title_edit_span" style="display: none;">
+                                <form class="form-inline" id="panel_title_edit_frm" action="{{url_for('update_side_title')}}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="panel_title_txt" name="title">
+                                            <span class="input-group-btn">
+                                                <button id="btn_panel_title_x" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
+                                                <button id="btn_panel_title_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                            </span>
+                                        </div>
+                                        <div style="display: none;">
+                                            <input type="text" class="cur-url" name="url">
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                    </div>
+                    {% if session.logged_in %}
+                    <div class="side-panel-icon panel-info">
+                        <a href="javascript:;" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
+                        <a href="javascript:;" class="side-view-mode" style="display: none;"><i title="Go to view" class="fa fa-eye"></i></a>
+                    </div>
+                    {% endif %}
+                    <!-- <div class="panel-body"></div> -->
+                    <!-- List group -->
+                    <ul class="list-group">
+                        {% for item in sideItem %}
+                        <li class="list-group-item" id="side_item_{{item.id}}">
+                            {{ item.item | safe }}
+                            <!-- <span class="side-item-url">{{ item.url | safe }}</span> -->
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>    
+                {% endif %}
+            {% endfor %}
             </div>
             <div class="col-sm-9 content">
                 {% block content %}{% endblock %}
