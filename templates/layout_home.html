@@ -86,7 +86,8 @@
                     <ul class="nav navbar-nav" id="menu_editable">
                         {% for i in menuItem %}
                         <li><a class="nav-page-menu" href="{{i.url}}">{{i.item}}</a></li>
-                        {% endfor %} {% if session.logged_in %}
+                        {% endfor %}
+                        {% if session.logged_in %}
                         <li id="add_menu_item_li">
                             <form class="form-inline menu-add-frm" id="menu_add_frm" action="{{url_for('add_menu_item')}}" method="post" style="display: none;">
                                 <div class="form-group">
@@ -127,6 +128,7 @@
                         <li><a href="{{ url_for('login') }}">Login</a></li>
                         {% endif %}
                     </ul>
+                    {% if session.logged_in %}
                     <ul class="nav navbar-nav navbar-right">
                         <li id="btn_edit_on_li"><a href="javascript:;" id="btn_edit_on">Edit All</a></li>
                         <li id="btn_edit_off_li" style="display: none;"><a href="javascript:;" id="btn_edit_off">View</a></li>
@@ -141,6 +143,7 @@
                             </div>
                         </form>
                     </ul>
+                    {% endif %}
                 </div>
                 <!-- /.navbar-collapse -->
             </div>
