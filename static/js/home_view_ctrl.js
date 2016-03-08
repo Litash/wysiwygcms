@@ -37,12 +37,20 @@ $('#menu-items ul.nav.navbar-nav li a').each(function(index, el) {
 
 // function for title editing
 var curTitle = "";
-$('#page_title').click(function(event) {
-    curTitle = $.trim($(this).text());
-    $(this).text("");
+function editTitleOn() {
+    curTitle = $.trim($('#page_title').text());
+    $('#page_title').text("");
     console.log(curTitle)
     $('#title_edit_frm').show();
     $('#title_txt').val(curTitle);
+}
+function editTitleOff() {
+    // restore current state
+    $('#page_title').text(curTitle);
+    $('#title_edit_frm').hide();
+}
+$('#page_title').dblclick(function(event) {
+    editTitleOn();
 });
 $('#btn_edit_title_check').click(function(event) {
     // $('#title_edit_url').val($('#page_url').val());
@@ -53,8 +61,7 @@ $('#btn_edit_title_check').click(function(event) {
     }
 });
 $('#btn_edit_title_x').click(function(event) {
-    $('#page_title').text(curTitle);
-    $('#title_edit_frm').hide();
+    editTitleOff();
 });
 
 // function for menu editing
@@ -109,7 +116,7 @@ sideEditor = new wysihtml5.Editor('side_wysihtml_editor', {
 });
 
 var isContentChanged = 0;
-var sideitem;
+var sideItem;
 var sideIsChanged = 0;
 var updateItemId; // id of selected side item
 var sideItemUrl; // url for side items on current page
@@ -119,8 +126,8 @@ var isNewSideItem = 0;
 $(document).on('click', '.side-panel li.list-hover', function(event) {
     event.preventDefault();
     isNewSideItem = 0
-    sideitem = $(this).html();
-    setModalValue (sideitem);
+    sideItem = $(this).html();
+    setModalValue (sideItem);
     updateItemId = getItemID($(this));
     // sideItemUrl =
     $('#side_delete_item').show();
@@ -130,15 +137,15 @@ $(document).on('click', '.side-panel li.list-hover', function(event) {
 $(document).on('click', 'li.list-group-item.add-list-item', function(event) {
     event.preventDefault();
     isNewSideItem = 1;
-    sideitem = "";
-    setModalValue (sideitem);
+    sideItem = "";
+    setModalValue (sideItem);
     $('#side_wysihtml_editor').addClass('expand-modal-editor');
     $('#side_delete_item').hide();
 });
 
-function setModalValue (sideitem) {
+function setModalValue (sideItem) {
     $('#side_panel_modal').modal('show');
-    sideEditor.setValue(sideitem, true);
+    sideEditor.setValue(sideItem, true);
     sideEditor.on("change", sideOnChange);
 }
 
@@ -159,12 +166,12 @@ function createSideItem() {
     if (updateItem=='') {
         if (confirm("You are about to save empty text, are you sure?")) {
             $('#side_create_text').val(updateItem);
-            $('#side_create_url').val(updateItemId);
+            // $('#side_create_url').val(updateItemId);
             $('#create_side').submit();
         };
     } else{
         $('#side_create_text').val(updateItem);
-        $('#side_create_url').val(updateItemId);
+        // $('#side_create_url').val(updateItemId);
         $('#create_side').submit();
     };
 }
@@ -200,6 +207,8 @@ $(document).on('click', '#upload_file', function(event) {
 });
 
 jQuery(document).ready(function($) {
+    // binding current url
+    $('.cur-url').val($('#page_url').val());
     // hide some elements when initialized
     $('#save_changes').hide();
     $('#side_panel_modal').modal('hide');
@@ -209,17 +218,22 @@ jQuery(document).ready(function($) {
     $('a#btn_edit_on').click(function(event) {
         $('#btn_edit_on_li').hide()
         $('#btn_edit_off_li').show()
+        // page title editing
+        editTitleOn();
         // menu item editing
         $('a#add_menu_item').show();
         $('a#remove_menu_item').show();
         // content editing
         openTextEditor();
         // side panel editing
+        panelTitleEditOn();
         view2Edit ();
     });
     $('a#btn_edit_off').click(function(event) {
         $('#btn_edit_on_li').show()
         $('#btn_edit_off_li').hide()
+        // page title
+        editTitleOff();
         // menu
         $('a#add_menu_item').hide();
         $('a#remove_menu_item').hide();
@@ -245,6 +259,7 @@ jQuery(document).ready(function($) {
         }else{
             edit2View ();
         };
+        panelTitleEditOff();
         // isContentChanged = 0;
         sideIsChanged=0;
     });
@@ -329,7 +344,7 @@ jQuery(document).ready(function($) {
         });
     }
 
-    // trigger for content text editor
+    // double click trigger for content text editor
     $('.editable').dblclick(function(event) {
         openTextEditor();
     });
@@ -438,5 +453,70 @@ jQuery(document).ready(function($) {
     });
     // end of file upload
 
+    // set side panel switch state
 
+
+});
+
+// side panel switch
+var sideState = $('#side_state').val();
+console.log("sideState = "+sideState);
+if (sideState=="1") {
+    $('#sidepanel_checkbox').bootstrapSwitch('state',true);
+    $('div.side-panel div.panel').show();
+}else{
+    $('#sidepanel_checkbox').bootstrapSwitch('state',false);
+    $('div.side-panel div.panel').hide();
+}
+
+$('#sidepanel_checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
+    if (!state) {
+        $('#side_panel_state').val(0);
+        $('div.side-panel div.panel').hide();
+    }else{
+        $('#side_panel_state').val(1);
+        $('div.side-panel div.panel').show();
+    }
+    $.ajax({
+        url: '/update_side_state',
+        type: 'POST',
+        data: $('#side_panel_state_frm').serialize(),
+    })
+    .done(function(data) {
+        console.log(data);
+        console.log("success");
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+
+    // $('#side_panel_state_frm').submit();
+});
+
+// side panel title editing
+var curPanelTitle = ""
+function panelTitleEditOn() {
+    curPanelTitle = $('#panel_title').text();
+    $('#panel_title').hide();
+    $('#panel_title_edit_span').show();
+    $('#panel_title_txt').val(curPanelTitle);
+}
+function panelTitleEditOff() {
+    // restore current state
+    $('#panel_title').text(curPanelTitle);
+    $('#panel_title').show();
+    $('#panel_title_edit_span').hide();
+}
+$('.panel-heading').dblclick(function(event) {
+    panelTitleEditOn();
+});
+
+$('#btn_panel_title_check').click(function(event) {
+    $('#panel_title_edit_frm').submit();
+});
+$('#btn_panel_title_x').click(function(event) {
+    panelTitleEditOff();
 });

@@ -59,7 +59,18 @@ header {
 ** Styles for side panel
 */
 
-.side-panel .panel {}
+.panel-heading {
+    cursor: pointer;
+}
+
+.side-panel-icon {
+    position: absolute;
+    z-index: 999;
+    right: -7px;
+    top: 10px;
+    width: 15px;
+    height: 25px;
+}
 
 
 /*add scroll bar to side panel*/

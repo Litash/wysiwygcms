@@ -19,6 +19,8 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap switch CSS -->
+    <link rel="stylesheet" href="/static/bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css">
     <!-- Custom styles -->
     <link href="/static/css/styles.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -53,9 +55,9 @@
                                         <button id="btn_edit_title_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
                                     </span>
                                 </div>
-                                <!-- <div style="display: none;">
-                                    <input type="text" id="title_edit_url" name="url">
-                                </div> -->
+                                <div style="display: none;">
+                                    <input type="text" class="cur-url" name="url">
+                                </div>
                             </div>
                         </form>
                     </span>
@@ -82,7 +84,7 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="menu-items">
                     <ul class="nav navbar-nav" id="menu_editable">
-                        {% for i in menuitem %}
+                        {% for i in menuItem %}
                         <li><a class="nav-page-menu" href="{{i.url}}">{{i.item}}</a></li>
                         {% endfor %} {% if session.logged_in %}
                         <li id="add_menu_item_li">
@@ -116,9 +118,6 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li id="btn_edit_on_li"><a href="javascript:;" id="btn_edit_on">Edit</a></li>
-                                <li id="btn_edit_off_li" style="display: none;"><a href="javascript:;" id="btn_edit_off">View</a></li>
-                                <li role="separator" class="divider"></li>
                                 <li><a href="{{url_for('show_sites')}}">My Sites</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{url_for('logout')}}">Logout</a></li>
@@ -127,6 +126,20 @@
                         {% else %}
                         <li><a href="{{ url_for('login') }}">Login</a></li>
                         {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li id="btn_edit_on_li"><a href="javascript:;" id="btn_edit_on">Edit All</a></li>
+                        <li id="btn_edit_off_li" style="display: none;"><a href="javascript:;" id="btn_edit_off">View</a></li>
+                        {% for s in sideState %}
+                        <input id="side_state" type="text" style="display: none;" value="{{s.state}}">
+                        <li><a href="javascript:;">Side Panel&nbsp;<input type="checkbox" id="sidepanel_checkbox" name="sidepanel-checkbox" data-animate="false" data-size="mini"></a></li>
+                        {% endfor %}
+                        <form id="side_panel_state_frm" action="{{url_for('update_side_state')}}" method="post" style="display: none;">
+                            <input type="text" id="side_panel_state" name="state">
+                            <div style="display: none;">
+                                <input type="text" class="cur-url" name="url">
+                            </div>
+                        </form>
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
@@ -137,17 +150,36 @@
             <div class="side-panel col-sm-3 pull-right">
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <span>IMPORTANT</span> {% if session.logged_in %}
-                        <div class="pull-right">
-                            <a href="javascript:;" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
-                            <a href="javascript:;" class="side-view-mode" style="display: none;"><i title="Go to view" class="fa fa-eye"></i></a>
-                        </div>
-                        {% endif %}
+                        {% for s in sideState %}
+                            <span id="panel_title">{{ s.title | safe }}</span>
+                            <span id="panel_title_edit_span" style="display: none;">
+                                <form class="form-inline" id="panel_title_edit_frm" action="{{url_for('update_side_title')}}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="panel_title_txt" name="title">
+                                            <span class="input-group-btn">
+                                                <button id="btn_panel_title_x" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
+                                                <button id="btn_panel_title_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                            </span>
+                                        </div>
+                                        <div style="display: none;">
+                                            <input type="text" class="cur-url" name="url">
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                        {% endfor %}
                     </div>
+                    {% if session.logged_in %}
+                    <div class="side-panel-icon panel-info">
+                        <a href="javascript:;" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
+                        <a href="javascript:;" class="side-view-mode" style="display: none;"><i title="Go to view" class="fa fa-eye"></i></a>
+                    </div>
+                    {% endif %}
                     <!-- <div class="panel-body"></div> -->
                     <!-- List group -->
                     <ul class="list-group">
-                        {% for item in sideitem %}
+                        {% for item in sideItem %}
                         <li class="list-group-item" id="side_item_{{item.id}}">
                             {{ item.item | safe }}
                             <!-- <span class="side-item-url">{{ item.url | safe }}</span> -->
@@ -254,6 +286,8 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Bootstrap switch js -->
+    <script src="/static/bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
     <!-- wysihtml core javascript with default toolbar functions -->
     <script src="/static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js"></script>
     <!-- rules defining tags, attributes and classes that are allowed -->

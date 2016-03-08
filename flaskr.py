@@ -9,7 +9,7 @@
 import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-    abort, render_template, flash, send_from_directory, jsonify
+    abort, render_template, flash, send_from_directory, jsonify, json
 from contextlib import closing
 import logging
 import uuid  # for CAS
@@ -96,8 +96,8 @@ def show_root(siteName):
     # cur = g.db.execute('SELECT siteName, idx, item, url FROM Menu ORDER BY idx;')
     # menuList = [dict(siteName=row[0], idx=row[1], item=row[2], url=row[3]) for row in cur.fetchall()]
     # # get side items
-    # cur = g.db.execute('SELECT item,id FROM sidepanel ORDER BY id DESC;')
-    # sideitem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
+    # cur = g.db.execute('SELECT item,id FROM SidePanelItem ORDER BY id DESC;')
+    # sideItem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
 
     # # update global variables
     # global SITE_NAME
@@ -105,7 +105,7 @@ def show_root(siteName):
     # SITE_NAME = siteName
     # MENU_LIST = menuList
 
-    # return render_template('home.html', content=content, sideitem=sideitem, menuitem=MENU_LIST)
+    # return render_template('home.html', content=content, sideItem=sideItem, menuItem=MENU_LIST)
 
 
 @app.route('/site/<siteName>/<menu>')
@@ -136,9 +136,12 @@ def show_home(siteName, menu):
         , [siteName])
     menuList = [dict(idx=row[0], item=row[1], url=row[2]) for row in cur.fetchall()]
     # logging.info("------------- menuList = %s", menuList)
+    # get side panel state
+    cur = g.db.execute('SELECT state, title FROM SidePanelState WHERE url = ?',[url])
+    sideState = [dict(state=row[0], title=row[1]) for row in cur.fetchall()]
     # get side panel items
-    cur = g.db.execute('SELECT id, url, item FROM sidepanel ORDER BY id DESC;')
-    sideitem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
+    cur = g.db.execute('SELECT id, url, item FROM SidePanelItem ORDER BY id DESC;')
+    sideItem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
 
     # update global variables
     global SITE_NAME
@@ -152,9 +155,13 @@ def show_home(siteName, menu):
     # logging.info("------------- MENU_LIST = %s", MENU_LIST)
     logging.info("------------- SITE_NAME = %s", SITE_NAME)
 
-    return render_template('home.html', title=SITE_TITLE, content=content, sideitem=sideitem, username=username, menuitem=MENU_LIST)
+    return render_template('home.html', title=SITE_TITLE, content=content,
+        sideItem=sideItem, username=username, menuItem=MENU_LIST, sideState=sideState)
 
 
+####
+# Site management
+####
 @app.route('/site/add_site', methods=['POST'])
 def add_site():
     """
@@ -176,9 +183,7 @@ def add_site():
     g.db.execute('INSERT INTO Site (name, title, url) values (?, ?, ?);',[siteName, siteTitle, siteURL])
     g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/home"])
     g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/home"])
-    # g.db.execute('INSERT INTO Content (content, url) values ("", ?);',[siteURL+"/lectures"])
-    # g.db.execute('INSERT INTO Content (content, url) values ("", ?);',[siteURL+"/assessment"])
-    # g.db.execute('INSERT INTO Content (content, url) values ("", ?);',[siteURL+"/resources"])
+    g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',[siteURL+"/home"])
     g.db.commit()
 
     # return jsonify(status=201, name=siteName, url=siteURL)
@@ -210,6 +215,9 @@ def update_site_title():
     return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
 
+####
+# menu item management
+####
 @app.route('/add_menu_item', methods=['POST'])
 def add_menu_item():
     if not session.get('logged_in'):
@@ -245,7 +253,7 @@ def remove_menu_item():
         [SITE_NAME, item, url])
     g.db.execute('DELETE FROM Content WHERE url=?;', [url])
     g.db.commit()
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu='home'))
 # @app.route('/add', methods=['POST'])
 # def add_entry():
 #     if not session.get('logged_in'):
@@ -257,8 +265,11 @@ def remove_menu_item():
 #     return redirect(url_for('show_home'))
 
 
-@app.route('/site/<siteName>/<menu>/update', methods=['POST'])
-def update_content(siteName, menu):
+####
+# Content update
+####
+@app.route('/update_content', methods=['POST'])
+def update_content():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
@@ -273,25 +284,58 @@ def update_content(siteName, menu):
     return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
 
-@app.route('/createside', methods=['POST'])
-def create_side():
+####
+#  side panel item management
+####
+@app.route('/update_side_state', methods=['POST'])
+def update_side_state():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
-    item = request.args['item']
-    url = request.args['url']
+    state = request.form['state']
+    url = request.form['url']
+    logging.info('---------- update side panel state = %s', state)
+    g.db.execute('UPDATE SidePanelState SET state = ? WHERE url = ?;',
+                 [state, url])
+    g.db.commit()
+    # flash('')
+    return json.dumps({'status':'OK','panelState':state,'url':url});
+
+
+@app.route('/update_side_title', methods=['POST'])
+def update_side_title():
+    if not session.get('logged_in'):
+        abort(401)
+    # if request.method == 'GET':
+    title = request.form['title']
+    url = request.form['url']
+    logging.info('---------- update side panel title = %s', title)
+    g.db.execute('UPDATE SidePanelState SET title = ? WHERE url = ?;',
+                 [title, url])
+    g.db.commit()
+    # flash('')
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
+
+
+@app.route('/create_side_item', methods=['POST'])
+def create_side_item():
+    if not session.get('logged_in'):
+        abort(401)
+    # if request.method == 'GET':
+    item = request.form['item']
+    url = request.form['url']
 
     logging.info('---------- update item -------- %s', item)
 
-    g.db.execute('INSERT INTO SidePanel (item, url) VALUES (?, ?);',
+    g.db.execute('INSERT INTO SidePanelItem (item, url) VALUES (?, ?);',
                  [item, url])
     g.db.commit()
     # flash('')
-    return redirect(url_for('show_home'))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
 
-@app.route('/updateside', methods=['POST'])
-def update_side():
+@app.route('/update_side_item', methods=['POST'])
+def update_side_item():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
@@ -299,27 +343,30 @@ def update_side():
     logID = request.form['id']
     logging.info('---------- update item -------- %s', logItem)
     logging.info('---------- update id -------- %s', logID)
-    g.db.execute('UPDATE sidepanel SET item = ? WHERE id = ?;',
+    g.db.execute('UPDATE SidePanelItem SET item = ? WHERE id = ?;',
                  [logItem, logID])
     g.db.commit()
     # flash('')
-    return redirect(url_for('show_home'))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
 
-@app.route('/deleleside', methods=['POST'])
-def delete_side():
+@app.route('/delete_side_item', methods=['POST'])
+def delete_side_item():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
     logID = request.form['id']
     logging.info('---------- update content -------- %s', logID)
-    g.db.execute('DELETE FROM sidepanel WHERE id = ?;',
+    g.db.execute('DELETE FROM SidePanelItem WHERE id = ?;',
                  [logID])
     g.db.commit()
     # flash('')
-    return redirect(url_for('show_home'))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
 
+####
+# Login
+####
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     # Validate the user.

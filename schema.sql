@@ -29,11 +29,19 @@ create table Content (
     url text not null
 );
 
-drop table if exists SidePanel;
-create table SidePanel (
+drop table if exists SidePanelItem;
+create table SidePanelItem (
     id integer primary key autoincrement,
     url text not null,
     item text not null
+);
+
+drop table if exists SidePanelState;
+create table SidePanelState (
+    id integer primary key autoincrement,
+    url text not null,
+    state integer not null,
+    title text not null
 );
 
 drop table if exists User;
