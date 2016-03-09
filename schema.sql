@@ -16,13 +16,6 @@ create table Menu (
 );
 
 drop table if exists Content;
-create table Content(
-    id integer primary key autoincrement,
-    url text not null,
-    content text not null
-);
-
-drop table if exists Content;
 create table Content (
     id integer primary key autoincrement,
     content text not null,
