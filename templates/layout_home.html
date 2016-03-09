@@ -32,6 +32,121 @@
 </head>
 
 <body>
+
+    <!-- side panel edit modal -->
+    <div class="modal fade" id="side_panel_modal">
+        <div class="modal-dialog modal-lg" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Edit item</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="side_wysihtml_toolbar" class="wysihtml-toolbar" style="display: none;">
+                        <div class="toolbar-main">
+                                <div class="row">
+                                    <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="Bold"><i class="fa fa-bold"></i></button>
+                                    <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="Italic"><i class="fa fa-italic"></i></button>
+                                    <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="Underline"><i class="fa fa-underline"></i></button>
+                                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button>
+                                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button>
+                                    <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button>
+                                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on">
+                                    <span class="red">&nbsp;</span>
+                                    </button>
+                                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on">
+                                    <span class="green">&nbsp;</span>
+                                    </button>
+                                    <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on">
+                                    <span class="blue">&nbsp;
+                                    </span>
+                                    </button>
+
+                                    <button class="btn btn-default" data-wysihtml5-command="insertOrderedList" title="Ordered List" type="button"><i class="fa fa-list-ol"></i></button>
+                                    <button class="btn btn-default" data-wysihtml5-command="insertUnorderedList" title="Unordered List" type="button"><i class="fa fa-list-ul"></i></button>
+
+                                    <!-- <button type="submit" class="btn btn-primary pull-right" id="save_changes" title="Save Changes"><i class="fa fa-floppy-o"></i></button> -->
+                                    <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="Redo"><i class="fa fa-repeat"></i></button>
+                                    <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="Undo"><i class="fa fa-undo"></i></button>
+                                    <!-- <button type="submit" class="btn btn-default pull-right" id="content_view" title="View"><i class="fa fa-eye"></i></button> -->
+                                    <button class="btn btn-default" data-wysihtml5-command="createLink" title="Insert Link" type="button"><i class="fa fa-link"></i></button>
+                                    <button class="btn btn-default" data-wysihtml5-command="insertImage" id="insert_img" title="Insert Image" type="button"><i class="fa fa-picture-o"></i></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div data-wysihtml5-dialog="createLink" style="display: none;" class="row">
+                                    <label for="link-url">Link URL</label>
+                                    <div class="input-group">
+                                        <input id="link-url" data-wysihtml5-dialog-field="href" value="http://" class="text form-control">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary" data-wysihtml5-dialog-action="save" type="button">OK</button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div data-wysihtml5-dialog="insertImage" style="display: none;" class="row">
+                                    <label for="img-url">Image URL</label>
+                                    <div class="input-group">
+                                      <input id="img-url" type="text" class="form-control" data-wysihtml5-dialog-field="src" value="http://">
+                                      <span class="input-group-btn">
+                                          <button class="btn btn-primary" data-wysihtml5-dialog-action="save" type="button">OK</button>
+                                      </span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div id="side_wysihtml_editor" class="wysihtml-editor">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="side_delete_item" class="btn btn-danger">Delete message&nbsp;<i class="fa fa-trash-o"></i></button>
+                    <button type="button" id="side_save_changes" class="btn btn-primary">Save changes&nbsp;<i class="fa fa-floppy-o"></i></button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <!-- upload file modal -->
+    <div class="modal fade" id="upload_file_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Upload file</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <form id="img_upload_frm" method="post" enctype="multipart/form-data">
+                                <div class="input-group">
+                                    <input type="file" name="file" class="form-control" placeholder="Select image">
+                                    <span class="input-group-btn">
+                                        <button id="btn_upload" type="button" class="btn btn-primary">Upload</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <p>Allowed file type:&nbsp;txt, pdf, doc, docx, jpg, jpeg, png, gif</p>
+                            <p>Max size:&nbsp;10 MB</p>
+                        </div>
+                        <div id="upload_console">
+                            <div class="row" id="upload_console_icon">
+                                <img id="img_uploading" src="/static/img/ring-alt.gif" alt="loading" style="display: none;">
+                                <img id="img_done_uploading" src="/static/img/check-circle.png" alt="check" style="display:none;">
+                                <img id="img_fail_uploading" src="/static/img/wrong.png" alt="wrong" style="display:none;">
+                            </div>
+                            <br>
+                            <div class="row" id="upload_console_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="container">
         <header class="container-fluid visible-md-block visible-lg-block">
             <div class="row">
@@ -254,87 +369,7 @@
         </div>
     </div> -->
 
-    <!-- side panel edit modal -->
-    <div class="modal fade" id="side_panel_modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit item</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="side_wysihtml_toolbar" class="wysihtml-toolbar" style="display: none;">
-                        <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="bold"><i class="fa fa-bold"></i></button>
-                        <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="italic"><i class="fa fa-italic"></i></button>
-                        <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="underline"><i class="fa fa-underline"></i></button>
-                        <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button>
-                        <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button>
-                        <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button>
-                        <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"><span class="red">&nbsp;</span></button>
-                        <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"><span class="green">&nbsp;</span></button>
-                        <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"><span class="blue">&nbsp;</span></button>
-                        <button class="btn btn-default" data-wysihtml5-command="createLink" title="insert link"><i class="fa fa-link" unselectable="on"></i></button>
-                        <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button>
-                        <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button>
-                        <div data-wysihtml5-dialog="createLink" style="display: none;">
-                            <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control">
-                            <div class="pull-right">
-                                <button class="btn btn-default" data-wysihtml5-dialog-action="cancel">Cancel</button>
-                                <button class="btn btn-primary" data-wysihtml5-dialog-action="save">OK</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="side_wysihtml_editor" class="wysihtml-editor">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="side_delete_item" class="btn btn-danger">Delete message&nbsp;<i class="fa fa-trash-o"></i></button>
-                    <button type="button" id="side_save_changes" class="btn btn-primary">Save changes&nbsp;<i class="fa fa-floppy-o"></i></button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-    <!-- upload file modal -->
-    <div class="modal fade" id="upload_file_modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Upload file</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <form id="img_upload_frm" method="post" enctype="multipart/form-data">
-                                <div class="input-group">
-                                    <input type="file" name="file" class="form-control" placeholder="Select image">
-                                    <span class="input-group-btn">
-                                        <button id="btn_upload" type="button" class="btn btn-primary">Upload</button>
-                                    </span>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="row">
-                            <p>Allowed file type:&nbsp;txt, pdf, doc, docx, jpg, jpeg, png, gif</p>
-                            <p>Max size:&nbsp;10 MB</p>
-                        </div>
-                        <div id="upload_console">
-                            <div class="row" id="upload_console_icon">
-                                <img id="img_uploading" src="/static/img/ring-alt.gif" alt="loading" style="display: none;">
-                                <img id="img_done_uploading" src="/static/img/check-circle.png" alt="check" style="display:none;">
-                                <img id="img_fail_uploading" src="/static/img/wrong.png" alt="wrong" style="display:none;">
-                            </div>
-                            <br>
-                            <div class="row" id="upload_console_text"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 
     <!-- Bootstrap core JavaScript

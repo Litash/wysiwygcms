@@ -358,9 +358,12 @@ jQuery(document).ready(function($) {
     function view2Edit () {
         $('.side-view-mode').show();
         $('.side-edit-mode').hide();
-        $('.side-panel ul.list-group').prepend('<li class="list-group-item add-list-item" title="Add item"><i class="fa fa-plus fa-2"></i></li>')
-        $('.side-panel ul.list-group li').addClass('list-hover');
-        $('.side-panel ul.list-group li.add-list-item').removeClass('list-hover');
+        // prevent to add duplicate " + " button
+        if (!$('.side-panel ul.list-group li').hasClass('add-list-item')) {
+            $('.side-panel ul.list-group').prepend('<li class="list-group-item add-list-item" title="Add item"><i class="fa fa-plus fa-2"></i></li>')
+            $('.side-panel ul.list-group li').addClass('list-hover');
+            $('.side-panel ul.list-group li.add-list-item').removeClass('list-hover');
+        }
     }
 
     function edit2View () {
