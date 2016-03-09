@@ -1,5 +1,5 @@
 /*
-** JavaScript to control home layout behaviours on Chameleon CMS
+** JavaScript to control home layout behaviours on Litash CMS
 ** Author: Yichen Lu
 */
 

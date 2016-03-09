@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ####
-# Flask program for Chameleon content management system
+# Flask program for Litash content management system
 # Author: Yichen LU
 # Date: 2-Oct-2015
 ####
@@ -183,6 +183,9 @@ def delete_site():
 
     g.db.execute('DELETE FROM Site WHERE url=?', [siteURL])
     g.db.execute('DELETE FROM Menu WHERE url LIKE ?', [siteURL+'%'])
+    g.db.execute('DELETE FROM Content WHERE url LIKE ?', [siteURL+'%'])
+    g.db.execute('DELETE FROM SidePanelItem WHERE url LIKE ?', [siteURL+'%'])
+    g.db.execute('DELETE FROM SidePanelState WHERE url LIKE ?', [siteURL+'%'])
     g.db.commit()
     return redirect(url_for('show_sites'))
 
@@ -238,6 +241,8 @@ def remove_menu_item():
     g.db.execute('DELETE FROM Menu WHERE siteName=? AND item=? AND url=?;',
         [SITE_NAME, item, url])
     g.db.execute('DELETE FROM Content WHERE url=?;', [url])
+    g.db.execute('DELETE FROM SidePanelItem WHERE url=?;', [url])
+    g.db.execute('DELETE FROM SidePanelState WHERE url=?;', [url])
     g.db.commit()
     return redirect(url_for('show_home', siteName=SITE_NAME, menu='home'))
 # @app.route('/add', methods=['POST'])

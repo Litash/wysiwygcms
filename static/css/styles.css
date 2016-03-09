@@ -329,7 +329,7 @@ header {
 }
 
 .nav-page-menu {
-    z-index: 9;
+    z-index: 0;
 }
 
 .menu-remover-cover {
