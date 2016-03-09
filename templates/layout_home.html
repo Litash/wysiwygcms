@@ -16,13 +16,14 @@
     </title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-
+    <!-- CSSake -->
+    <link rel="stylesheet" type="text/css" href="/static/bower_components/csshake/dist/csshake.min.css">
     <!-- Bootstrap core CSS -->
-    <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Bootstrap switch CSS -->
     <link rel="stylesheet" href="/static/bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css">
     <!-- Custom styles -->
-    <link href="/static/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -40,18 +41,24 @@
                     </div>
                 </div>
                 <div class="col-sm-10">
+                    {% for t in title %}
+                    {% if session.logged_in %}
                     <span class="page-title" id="page_title">
-                        {% for t in title %}
-                            {{ t.title | safe}}
-                        {% endfor %}
+                        {{ t.title | safe}}
                     </span>
+                    {% else %}
+                    <span class="page-title">
+                        {{ t.title | safe}}
+                    </span>
+                    {% endif %}
+                    {% endfor %}
                     <span>
                         <form class="form-inline" id="title_edit_frm" action="{{url_for('update_site_title')}}" method="post" style="display: none;">
                             <div class="form-group title-editor">
                                 <div class="input-group title-editor">
                                     <input type="text" class="form-control" id="title_txt" name="title">
                                     <span class="input-group-btn">
-                                        <button id="btn_edit_title_x" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
+                                        <button id="btn_edit_title_x" class="btn btn-default" type="button"><i class="fa fa-times"></i></button>
                                         <button id="btn_edit_title_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
                                     </span>
                                 </div>
@@ -94,7 +101,7 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="nm_item" name="item">
                                         <span class="input-group-btn">
-                                            <button id="btn_add_menu_x" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
+                                            <button id="btn_add_menu_x" class="btn btn-default" type="button"><i class="fa fa-times"></i></button>
                                             <button id="btn_add_menu_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
                                         </span>
                                     </div>
@@ -153,63 +160,34 @@
             <div class="side-panel col-sm-3 pull-right">
             {% for s in sideState %}
                 {% if s.state==0 %}
-                    <div class="panel panel-info" style="display: none;">
-                    <div class="panel-heading">
-                            <span id="panel_title">{{ s.title | safe }}</span>
-                            <span id="panel_title_edit_span" style="display: none;">
-                                <form class="form-inline" id="panel_title_edit_frm" action="{{url_for('update_side_title')}}" method="post">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="panel_title_txt" name="title">
-                                            <span class="input-group-btn">
-                                                <button id="btn_panel_title_x" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
-                                                <button id="btn_panel_title_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
-                                            </span>
-                                        </div>
-                                        <div style="display: none;">
-                                            <input type="text" class="cur-url" name="url">
-                                        </div>
-                                    </div>
-                                </form>
-                            </span>
-                    </div>
-                    {% if session.logged_in %}
-                    <div class="side-panel-icon panel-info">
-                        <a href="javascript:;" class="side-edit-mode"><i title="Go to edit" class="fa fa-pencil"></i></a>
-                        <a href="javascript:;" class="side-view-mode" style="display: none;"><i title="Go to view" class="fa fa-eye"></i></a>
-                    </div>
-                    {% endif %}
-                    <!-- <div class="panel-body"></div> -->
-                    <!-- List group -->
-                    <ul class="list-group">
-                        {% for item in sideItem %}
-                        <li class="list-group-item" id="side_item_{{item.id}}">
-                            {{ item.item | safe }}
-                            <!-- <span class="side-item-url">{{ item.url | safe }}</span> -->
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>    
+                <div class="panel panel-info" style="display: none;">
                 {% else %}
-                    <div class="panel panel-info">
+                <div class="panel panel-info">
+                {% endif %}
+
+
+                {% if session.logged_in %}
+                    <div class="panel-heading" id="panel_heading">
+                {% else %}
                     <div class="panel-heading">
-                            <span id="panel_title">{{ s.title | safe }}</span>
-                            <span id="panel_title_edit_span" style="display: none;">
-                                <form class="form-inline" id="panel_title_edit_frm" action="{{url_for('update_side_title')}}" method="post">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="panel_title_txt" name="title">
-                                            <span class="input-group-btn">
-                                                <button id="btn_panel_title_x" class="btn btn-danger" type="button"><i class="fa fa-times"></i></button>
-                                                <button id="btn_panel_title_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
-                                            </span>
-                                        </div>
-                                        <div style="display: none;">
-                                            <input type="text" class="cur-url" name="url">
-                                        </div>
+                {% endif %}
+                        <span id="panel_title">{{ s.title | safe }}</span>
+                        <span id="panel_title_edit_span" style="display: none;">
+                            <form class="form-inline" id="panel_title_edit_frm" action="{{url_for('update_side_title')}}" method="post">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="panel_title_txt" name="title">
+                                        <span class="input-group-btn">
+                                            <button id="btn_panel_title_x" class="btn btn-default" type="button"><i class="fa fa-times"></i></button>
+                                            <button id="btn_panel_title_check" class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                        </span>
                                     </div>
-                                </form>
-                            </span>
+                                    <div style="display: none;">
+                                        <input type="text" class="cur-url" name="url">
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
                     </div>
                     {% if session.logged_in %}
                     <div class="side-panel-icon panel-info">
@@ -227,9 +205,10 @@
                         </li>
                         {% endfor %}
                     </ul>
-                </div>    
-                {% endif %}
+                </div>
+
             {% endfor %}
+
             </div>
             <div class="col-sm-9 content">
                 {% block content %}{% endblock %}
@@ -240,6 +219,40 @@
         <p class="text-center">Chameleon Content Management System, by <a href="mailto:me@yichen.lu">Yichen Lu</a>.</p>
     </div>
 
+
+    <!-- add table modal -->
+   <!--  <div class="modal fade" id="add_table_modal" role="dialog" aria-labelledby="addTableModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Table</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+
+                        <div data-wysihtml5-dialog="createTable" class="form-inline">
+                            <div class="form-group">
+                                <label for="tbl_row">Rows</label>
+                                <input type="text" class="form-control" id="tbl_row" data-wysihtml5-dialog-field="rows" placeholder="Number of rows">
+                            </div>
+                            <div class="form-group">
+                                <label for="tbl_col">Columns</label>
+                                <input type="text" class="form-control" id="tbl_col" data-wysihtml5-dialog-field="cols" placeholder="Number of columns">
+                            </div>
+                            <button type="button" class="btn btn-default" data-wysihtml5-dialog-action="cancel">Close</button>
+                            <button type="button" class="btn btn-primary" data-wysihtml5-dialog-action="save">OK</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" data-wysihtml5-dialog-action="cancel">Close</button>
+                    <button type="button" class="btn btn-primary" data-wysihtml5-dialog-action="save">OK</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
 
     <!-- side panel edit modal -->
     <div class="modal fade" id="side_panel_modal">
@@ -284,7 +297,7 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-    <!-- upload img modal -->
+    <!-- upload file modal -->
     <div class="modal fade" id="upload_file_modal">
         <div class="modal-dialog">
             <div class="modal-content">

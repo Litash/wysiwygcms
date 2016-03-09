@@ -20,7 +20,7 @@ from flask.ext.autoindex import AutoIndex
 # create our little application
 app = Flask(__name__)
 
-SITE_NAME = ""
+SITE_NAME = "" # second part of current url
 SITE_TITLE = ""
 MENU = "" # current selected menu item
 MENU_LIST = [] # list of all menu items
@@ -88,25 +88,6 @@ def show_root(siteName):
     # MENU_LIST = menuList
     return redirect(url_for('show_home', siteName=SITE_NAME, menu='home'))
 
-    # # get content
-    # url = "/site/"+siteName+'/home'
-    # cur = g.db.execute('SELECT content,url FROM Content WHERE url=?;', [url])
-    # content = [dict(text=row[0], url=row[1]) for row in cur.fetchall()]
-    # # get menu item for this site
-    # cur = g.db.execute('SELECT siteName, idx, item, url FROM Menu ORDER BY idx;')
-    # menuList = [dict(siteName=row[0], idx=row[1], item=row[2], url=row[3]) for row in cur.fetchall()]
-    # # get side items
-    # cur = g.db.execute('SELECT item,id FROM SidePanelItem ORDER BY id DESC;')
-    # sideItem = [dict(item=row[0], id=row[1]) for row in cur.fetchall()]
-
-    # # update global variables
-    # global SITE_NAME
-    # global MENU_LIST
-    # SITE_NAME = siteName
-    # MENU_LIST = menuList
-
-    # return render_template('home.html', content=content, sideItem=sideItem, menuItem=MENU_LIST)
-
 
 @app.route('/site/<siteName>/<menu>')
 def show_home(siteName, menu):
@@ -142,7 +123,8 @@ def show_home(siteName, menu):
     logging.info("------------ side state = %s", sideState)
 
     # get side panel items
-    cur = g.db.execute('SELECT id, url, item FROM SidePanelItem ORDER BY id DESC;')
+    cur = g.db.execute('SELECT id, url, item FROM SidePanelItem WHERE url= ? ORDER BY id DESC;',
+        [url])
     sideItem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
 
     # update global variables
@@ -164,7 +146,7 @@ def show_home(siteName, menu):
 ####
 # Site management
 ####
-@app.route('/site/add_site', methods=['POST'])
+@app.route('/add_site', methods=['POST'])
 def add_site():
     """
     function for add a new site.
@@ -192,7 +174,7 @@ def add_site():
     return redirect(url_for('show_sites'))
 
 
-@app.route('/site/delete_site', methods=['POST'])
+@app.route('/delete_site', methods=['POST'])
 def delete_site():
     if not session.get('logged_in'):
         abort(401)
@@ -205,7 +187,7 @@ def delete_site():
     return redirect(url_for('show_sites'))
 
 
-@app.route('/site/update_site_title', methods=['POST'])
+@app.route('/update_site_title', methods=['POST'])
 def update_site_title():
     if not session.get('logged_in'):
         abort(401)
@@ -238,9 +220,11 @@ def add_menu_item():
             [siteName, idx, item, url])
         g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',
             [url])
+        g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',
+            [url])
         g.db.commit()
 
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=item.strip()))
 
 
 @app.route('/remove_menu_item', methods=['POST'])

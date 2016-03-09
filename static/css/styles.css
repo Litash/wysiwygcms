@@ -300,6 +300,11 @@ header {
     clear: left;
 }
 
+#content_wysihtml_editor table {
+    border-width: 1px;
+    border-color: #000;
+    border-style: solid;
+}
 
 /*
 ** file uploading elements
@@ -323,17 +328,25 @@ header {
     width: 135px;
 }
 
+.nav-page-menu {
+    z-index: 9;
+}
+
 .menu-remover-cover {
     position: absolute;
-    z-index: 999;
+    z-index: 99;
     height: 100%;
     width: 100%;
     cursor: pointer;
 }
 
 .x-menu-item{
-    margin-left: 4px;
+    right: 2px;
+    top: 2px;
+    position: absolute;
+    z-index: 999;
 }
+
 
 /*
 ** Style for title editing elements

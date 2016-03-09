@@ -5,8 +5,8 @@
 
 jQuery(document).ready(function($) {
     $('#siteURL').focus(function(event) {
-        var siteName = $('#siteName').val();
-        $(this).val('/site/'+siteName);
+        var siteNameNoSpace = $.trim($('#siteName').val());
+        $(this).val('/site/'+siteNameNoSpace);
     });
     $('#btn_create_site').click(function(event) {
         event.preventDefault();
