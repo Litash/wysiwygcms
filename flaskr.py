@@ -86,7 +86,7 @@ def show_root(siteName):
     SITE_NAME = siteName
     logging.info("---------------- show_root SITE_NAME = %s", SITE_NAME)
     # MENU_LIST = menuList
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu='home'))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu='Home'))
 
 
 @app.route('/site/<siteName>/<menu>')
@@ -116,7 +116,6 @@ def show_home(siteName, menu):
     cur = g.db.execute('SELECT idx, item, url FROM Menu WHERE siteName = ? ORDER BY idx;'
         , [siteName])
     menuList = [dict(idx=row[0], item=row[1], url=row[2]) for row in cur.fetchall()]
-    # logging.info("------------- menuList = %s", menuList)
     # get side panel state
     cur = g.db.execute('SELECT state, title FROM SidePanelState WHERE url = ?',[url])
     sideState = [dict(state=row[0], title=row[1]) for row in cur.fetchall()]
@@ -165,9 +164,9 @@ def add_site():
 
     # logging.info(existSites)
     g.db.execute('INSERT INTO Site (name, title, url) values (?, ?, ?);',[siteName, siteTitle, siteURL])
-    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/home"])
-    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/home"])
-    g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',[siteURL+"/home"])
+    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/Home"])
+    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/Home"])
+    g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',[siteURL+"/Home"])
     g.db.commit()
 
     # return jsonify(status=201, name=siteName, url=siteURL)
@@ -244,16 +243,15 @@ def remove_menu_item():
     g.db.execute('DELETE FROM SidePanelItem WHERE url=?;', [url])
     g.db.execute('DELETE FROM SidePanelState WHERE url=?;', [url])
     g.db.commit()
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu='home'))
-# @app.route('/add', methods=['POST'])
-# def add_entry():
-#     if not session.get('logged_in'):
-#         abort(401)
-#     g.db.execute('insert into entries (title, text) values (?, ?)',
-#                  [request.form['title'], request.form['text']])
-#     g.db.commit()
-#     flash('New entry was successfully posted')
-#     return redirect(url_for('show_home'))
+
+    # get menu item for this site
+    cur = g.db.execute('SELECT idx, item, url FROM Menu WHERE siteName = ? ORDER BY idx;'
+        , [SITE_NAME])
+    menuList = [dict(idx=row[0], item=row[1], url=row[2]) for row in cur.fetchall()]
+    # logging.info("------------- menuList = %s", menuList)
+    firstMenu = menuList[0]['item']
+
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=firstMenu))
 
 
 ####
