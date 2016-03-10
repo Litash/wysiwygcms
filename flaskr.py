@@ -86,7 +86,7 @@ def show_root(siteName):
     SITE_NAME = siteName
     logging.info("---------------- show_root SITE_NAME = %s", SITE_NAME)
     # MENU_LIST = menuList
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu='Home'))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu='home'))
 
 
 @app.route('/site/<siteName>/<menu>')
@@ -103,7 +103,8 @@ def show_home(siteName, menu):
             # if session.get('username') and session['usercategory']=='staff':
             username = session['fullname']
     else:
-        return login()
+        session["logged_in"] = False
+        # return login()
 
     url = '/site/'+siteName+'/'+menu
     # logging.info('---------------- url = %s', url)
@@ -112,6 +113,9 @@ def show_home(siteName, menu):
     # logging.info("------------- site title = %s", cur.fetchall())
     siteTitle = [dict(title=row[0]) for row in cur.fetchall()]
     logging.info("--------------- siteTitle = %s", siteTitle)
+
+    if len(siteTitle) == 0:
+        abort(404)
 
     # get content
     cur = g.db.execute('SELECT content,url FROM Content WHERE url=?;', [url])
@@ -159,15 +163,16 @@ def add_site():
     logging.info(request)
     siteTitle = request.form['siteTitle']
     siteName = request.form['siteName']
-    siteURL = request.form['siteURL']
+    # siteURL = request.form['siteURL']
+    siteURL = "/site/"+siteName.strip()
     # TODO: if exist, add; then fail
     logging.info('---------- NEW SITE: siteName = %s, siteURL = %s', siteName, siteURL)
 
     # logging.info(existSites)
     g.db.execute('INSERT INTO Site (name, title, url) values (?, ?, ?);',[siteName, siteTitle, siteURL])
-    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/Home"])
-    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/Home"])
-    g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',[siteURL+"/Home"])
+    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/home"])
+    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/home"])
+    g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',[siteURL+"/home"])
     g.db.commit()
 
     # return jsonify(status=201, name=siteName, url=siteURL)
@@ -213,7 +218,7 @@ def add_menu_item():
     idx = request.form['idx']
     item = request.form['item']
     siteName = SITE_NAME
-    url = "/site/"+siteName+"/"+item.strip()
+    url = "/site/"+siteName+"/"+item.strip().lower()
     # url = request.form['url']
     logging.info("-------------- new menu item = %s", item)
     logging.info("-------------- new menu idx = %s", idx)
@@ -227,7 +232,7 @@ def add_menu_item():
             [url])
         g.db.commit()
 
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu=item.strip()))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=item.strip().lower()))
 
 
 @app.route('/remove_menu_item', methods=['POST'])
@@ -252,7 +257,7 @@ def remove_menu_item():
     # logging.info("------------- menuList = %s", menuList)
     firstMenu = menuList[0]['item']
 
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu=firstMenu))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=firstMenu.lower()))
 
 
 ####

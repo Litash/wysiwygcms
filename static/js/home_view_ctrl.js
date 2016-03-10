@@ -35,7 +35,10 @@ $('#menu-items ul.nav.navbar-nav li a').each(function(index, el) {
     }
 });
 
+
+// =======================================
 // function for title editing
+// =======================================
 var curTitle = "";
 function editTitleOn() {
     curTitle = $.trim($('#page_title').text());
@@ -64,7 +67,11 @@ $('#btn_edit_title_x').click(function(event) {
     editTitleOff();
 });
 
+
+// =======================================
 // function for menu editing
+// =======================================
+
 $(document).on('click', 'a#add_menu_item', function(event) {
     event.preventDefault();
     $('form#menu_add_frm').show();
@@ -72,7 +79,8 @@ $(document).on('click', 'a#add_menu_item', function(event) {
 });
 $('#btn_add_menu_check').click(function(event) {
     var idx = $('#menu_editable li').length - 1;
-    var menuTxt = $('input#nm_item').val()
+    var menuTxt = $('input#nm_item').val();
+    // var menuTxt4Url = menuTxt.toLowerCase();
     $('input#nm_idx').val(idx);
 
     if (menuTxt.length>0) {
@@ -109,7 +117,12 @@ $(document).on('click', 'a#remove_menu_item', function(event) {
     }
 });
 
+
+
+// =======================================
 // code for side panel editor, need to be initialized before doeument ready
+// =======================================
+
 sideEditor = new wysihtml5.Editor('side_wysihtml_editor', {
     toolbar: 'side_wysihtml_toolbar',
     parserRules: wysihtml5ParserRules // defined in file parser rules javascript
@@ -200,12 +213,17 @@ function deleteSideItem () {
     };
 }
 
-
+// =======================================
 // upload modal trigger
+// =======================================
 $(document).on('click', '#upload_file', function(event) {
     $('#upload_file_modal').modal('show');
 });
 
+
+// =======================================
+// function run after document loaded
+// =======================================
 
 jQuery(document).ready(function($) {
     // binding current url
@@ -216,7 +234,9 @@ jQuery(document).ready(function($) {
     $('#side_panel_modal').modal('hide');
     $('#upload_file_modal').modal('hide');
 
-    // switch for menu, content text editor and side panel
+    // =======================================
+    // mass edit switch (menu, content text editor and side panel)
+    // =======================================
     $('a#btn_edit_on').click(function(event) {
         $('#btn_edit_on_li').hide()
         $('#btn_edit_off_li').show()
@@ -266,6 +286,11 @@ jQuery(document).ready(function($) {
         sideIsChanged=0;
     });
 
+
+    // =======================================
+    // functions for control text editor
+    // =======================================
+
     // global variables
     var txt = $('.editable').html();
     var editor;
@@ -274,21 +299,10 @@ jQuery(document).ready(function($) {
     $('a.side-edit-mode').on('click', function(event) {
         event.preventDefault();
         view2Edit ();
-
-        // var wysihtmlBone = '<div id="content_wysihtml_toolbar" class="wysihtml-toolbar" style="display: none;"> <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="bold"><i class="fa fa-bold"></i></button> <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="italic"><i class="fa fa-italic"></i></button> <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="underline"><i class="fa fa-underline"></i></button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"><span class="red">&nbsp;</span></button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"><span class="green">&nbsp;</span></button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"><span class="blue">&nbsp;</span></button> <button class="btn btn-default" data-wysihtml5-command="createLink" title="insert link"><i class="fa fa-link" unselectable="on"></i></button> <button type="submit" id="save_changes" class="btn btn-default pull-right" title="Save changes"><i class="fa fa-floppy-o"></i></button> <!-- <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="redo"><i class="fa fa-repeat"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="undo"><i class="fa fa-undo"></i></button> --> <div data-wysihtml5-dialog="createLink" style="display: none;"> <input data-wysihtml5-dialog-field="href" value="http://" class="text form-control"> <div class="pull-right"> <button class="btn btn-default" data-wysihtml5-dialog-action="cancel">Cancel</button> <button class="btn btn-primary" data-wysihtml5-dialog-action="save">OK</button> </div> </div></div><div id="content_wysihtml_editor" class="wysihtml-editor"></div>'
-        // $('.editable').html(wysihtmlBone)
-        // editor = new wysihtml5.Editor('content_wysihtml_editor', {
-        //     toolbar: 'content_wysihtml_toolbar',
-        //     parserRules: wysihtml5ParserRules // defined in file parser rules javascript
-        // });
-        // editor.setValue(txt, true);
-        // editor.on("change", onChange);
-
         $('a.side-view-mode').show();
         $(this).hide();
-
-
     });
+
     // mode ctrl
     $('.side-view-mode').on('click', function(event) {
         event.preventDefault();
@@ -351,10 +365,12 @@ jQuery(document).ready(function($) {
         openTextEditor();
     });
 
+    // function to detect if there is any changes made
     function onChange() {
         isContentChanged = 1;
     }
 
+    // function to switch view mode to edit mode for right panel
     function view2Edit () {
         $('.side-view-mode').show();
         $('.side-edit-mode').hide();
@@ -366,6 +382,7 @@ jQuery(document).ready(function($) {
         }
     }
 
+    // function to switch edit mode to view mode for right panel
     function edit2View () {
         $('.side-edit-mode').show();
         $('.side-view-mode').hide();
@@ -417,8 +434,9 @@ jQuery(document).ready(function($) {
         isContentChanged = 0;
     });
 
-
+    // =======================================
     // function for file upload
+    // =======================================
     $('#btn_upload').click(function(event) {
         $('#img_uploading').show();
         var form_data = new FormData($('#img_upload_frm')[0]);
@@ -456,9 +474,6 @@ jQuery(document).ready(function($) {
     $('#img_upload_frm input[type=file]').click(function(event) {
         $('#upload_console_text').empty();
     });
-    // end of file upload
-
-    // set side panel switch state
 
 
 });
@@ -474,6 +489,7 @@ if (sideState=="1") {
     // $('div.side-panel div.panel').hide();
 }
 
+// site panel switch state recorder
 $('#sidepanel_checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
     if (!state) {
         $('#side_panel_state').val(0);
