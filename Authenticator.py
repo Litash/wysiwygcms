@@ -140,7 +140,7 @@ class Authenticator(object):
         if session.get("authenticated"):
             return session["authenticated"]
         else:
-            return "haha"
+            return false
 
 
 
