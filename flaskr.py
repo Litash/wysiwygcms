@@ -13,7 +13,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from contextlib import closing
 import logging
 import uuid  # for CAS
-import time  # for CAS
+import datetime  # for CAS
 from werkzeug import secure_filename  # for uploading files
 from flask.ext.autoindex import AutoIndex
 
@@ -27,7 +27,7 @@ MENU_LIST = [] # list of all menu items
 UPLOAD_FOLDER = app.root_path + '/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'TXT', 'pdf', 'PDF',
                           'png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF',
-                          'doc', 'DOC', 'docx', 'DOCX'])
+                          'doc', 'DOC', 'docx', 'DOCX', 'ppt', 'PPT'])
 
 
 # Load default config and override config from an environment variable
@@ -86,19 +86,25 @@ def show_root(siteName):
     SITE_NAME = siteName
     logging.info("---------------- show_root SITE_NAME = %s", SITE_NAME)
     # MENU_LIST = menuList
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu='Home'))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu='home'))
 
 
 @app.route('/site/<siteName>/<menu>')
 def show_home(siteName, menu):
-
-    if session.get('username'):
-        # uncomment following line and comment out above
-        # to only allow staff to login
-        # if session.get('username') and session['usercategory']=='staff':
-        username = session['fullname']
+    global SITE_NAME
+    global MENU
+    SITE_NAME = siteName
+    MENU = menu
+    username = "null"
+    if isAuthenticated():
+        if session.get('username'):
+            # uncomment following line and comment out above
+            # to only allow staff to login
+            # if session.get('username') and session['usercategory']=='staff':
+            username = session['fullname']
     else:
-        username = "null"
+        session["logged_in"] = False
+        # return login()
 
     url = '/site/'+siteName+'/'+menu
     # logging.info('---------------- url = %s', url)
@@ -107,6 +113,9 @@ def show_home(siteName, menu):
     # logging.info("------------- site title = %s", cur.fetchall())
     siteTitle = [dict(title=row[0]) for row in cur.fetchall()]
     logging.info("--------------- siteTitle = %s", siteTitle)
+
+    if len(siteTitle) == 0:
+        abort(404)
 
     # get content
     cur = g.db.execute('SELECT content,url FROM Content WHERE url=?;', [url])
@@ -127,13 +136,9 @@ def show_home(siteName, menu):
     sideItem = [dict(id=row[0], url=row[1], item=row[2]) for row in cur.fetchall()]
 
     # update global variables
-    global SITE_NAME
     global SITE_TITLE
-    global MENU
     global MENU_LIST
-    SITE_NAME = siteName
     SITE_TITLE = siteTitle
-    MENU = menu
     MENU_LIST = menuList
     # logging.info("------------- MENU_LIST = %s", MENU_LIST)
     logging.info("------------- SITE_NAME = %s", SITE_NAME)
@@ -158,15 +163,16 @@ def add_site():
     logging.info(request)
     siteTitle = request.form['siteTitle']
     siteName = request.form['siteName']
-    siteURL = request.form['siteURL']
+    # siteURL = request.form['siteURL']
+    siteURL = "/site/"+siteName.strip()
     # TODO: if exist, add; then fail
     logging.info('---------- NEW SITE: siteName = %s, siteURL = %s', siteName, siteURL)
 
     # logging.info(existSites)
     g.db.execute('INSERT INTO Site (name, title, url) values (?, ?, ?);',[siteName, siteTitle, siteURL])
-    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/Home"])
-    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/Home"])
-    g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',[siteURL+"/Home"])
+    g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/home"])
+    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/home"])
+    g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',[siteURL+"/home"])
     g.db.commit()
 
     # return jsonify(status=201, name=siteName, url=siteURL)
@@ -212,7 +218,7 @@ def add_menu_item():
     idx = request.form['idx']
     item = request.form['item']
     siteName = SITE_NAME
-    url = "/site/"+siteName+"/"+item.strip()
+    url = "/site/"+siteName+"/"+item.strip().lower()
     # url = request.form['url']
     logging.info("-------------- new menu item = %s", item)
     logging.info("-------------- new menu idx = %s", idx)
@@ -226,7 +232,7 @@ def add_menu_item():
             [url])
         g.db.commit()
 
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu=item.strip()))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=item.strip().lower()))
 
 
 @app.route('/remove_menu_item', methods=['POST'])
@@ -251,7 +257,7 @@ def remove_menu_item():
     # logging.info("------------- menuList = %s", menuList)
     firstMenu = menuList[0]['item']
 
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu=firstMenu))
+    return redirect(url_for('show_home', siteName=SITE_NAME, menu=firstMenu.lower()))
 
 
 ####
@@ -370,12 +376,14 @@ def login():
     # we need to send for authentication.
     elif not request.args.get('csticket'):
         url = sendForAuthentication()
+        logging.warning(url + "\n\nredirecting\n")
         return redirect(url)
 
     # Else if the GET parameter csticket is populated but doesn't match
     # the session csticket send the user for authentication.
     elif request.args.get('csticket') != session['csticket']:
         url = sendForAuthentication()
+        logging.warning(url + "\n\nnot valid csticket\n=============\nredirecting\n")
         return redirect(url)
 
     else:
@@ -429,7 +437,7 @@ def sendForAuthentication():
     url = AUTH_SERVICE_URL + "?url=" + \
         DEVELOPER_URL + "&csticket=" + csticket
 
-    logging.warning(url + "\n\nredirecting\n")
+    logging.warning(url + "\n\send for authentication\n")
     return url
 
 
@@ -438,7 +446,7 @@ def recordAuthenticatedUser():
     A function to record that a user is authenticated.
     """
     # Record the time authenticated.
-    session["authenticated"] = str(time.time())
+    session["authenticated"] = str(datetime.datetime.now())
     logging.warning(
         "----- authenticated timestamp " + session["authenticated"] + " -----")
 
@@ -467,6 +475,15 @@ def getTimeAuthenticated():
     A function to get the timestamp when the user authenticated.
     """
     if session.get("authenticated"):
+        # # example of time string in session = 2016-03-10 08:31:44.809080
+        # sessionTime = datetime.datetime.strptime(session["authenticated"], '%Y-%m-%d %H:%M:%S.%f')
+        # nowTime = datetime.datetime.now()
+        # expirePeriod = datetime.timedelta(seconds=20)
+        # logging.info("------------- Authenticated = %s", sessionTime)
+        # # check if time expired
+        # if (sessionTime - nowTime) < expirePeriod:
+        #     logging.info("------------- session expired")
+        #     return "False"
         return session["authenticated"]
     else:
         return "False"
