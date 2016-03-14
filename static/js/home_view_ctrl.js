@@ -3,7 +3,6 @@
 ** Author: Yichen Lu
 */
 
-var wysihtmlBone;
 // Responsive optimization
 (function($) {
     var $window = $(window),
@@ -38,133 +37,10 @@ $('#menu-items ul.nav.navbar-nav li a').each(function(index, el) {
 });
 
 // hide some elements when initialized
-$('#save_changes').hide();
+// $('#save_changes').hide();
 $('#side_panel_modal').modal('hide');
 $('#upload_file_modal').modal('hide');
 
-
-// =======================================
-// functions for control text editor
-// =======================================
-
-// global variables
-var txt = $('.editable').html();
-var editor;
-
-// code for wysihtml editor and start edit mode
-$('a.side-edit-mode').on('click', function(event) {
-    event.preventDefault();
-    view2Edit ();
-    $('a.side-view-mode').show();
-    $(this).hide();
-});
-
-// double click trigger for content text editor
-$('.editable').dblclick(function(event) {
-    openTextEditor();
-});
-
-// switch on text editor for page content
-function openTextEditor() {
-    $('.editable').html(wysihtmlBone)
-    editor = new wysihtml5.Editor('content_wysihtml_editor', {
-        toolbar: 'content_wysihtml_toolbar',
-        parserRules: wysihtml5ParserRules // defined in file parser rules javascript
-    });
-    editor.setValue(txt, true);
-    editor.on("change", onChange);
-
-    // save text functions
-    $('#save_changes').on('click', function(event) {
-        event.preventDefault();
-        saveContent();
-        edit2View ();
-    });
-
-    $('#content_view').click(function(event) {
-        if (isContentChanged==1) {
-            if (confirm("You have made some changes, do you want to save it?")) {
-                saveContent();
-            } else{
-                $('.editable').html(txt);
-            };
-        }else{
-            $('.editable').html(txt);
-        };
-        isContentChanged = 0;
-    });
-}
-
-
-
-// function to detect if there is any changes made
-function onChange() {
-    isContentChanged = 1;
-}
-
-// function to switch view mode to edit mode for right panel
-function view2Edit () {
-    $('.side-view-mode').show();
-    $('.side-edit-mode').hide();
-    // prevent to add duplicate " + " button
-    if (!$('.side-panel ul.list-group li').hasClass('add-list-item')) {
-        $('.side-panel ul.list-group').prepend('<li class="list-group-item add-list-item" title="Add item"><i class="fa fa-plus fa-2"></i></li>')
-        $('.side-panel ul.list-group li').addClass('list-hover');
-        $('.side-panel ul.list-group li.add-list-item').removeClass('list-hover');
-    }
-}
-
-// function to switch edit mode to view mode for right panel
-function edit2View () {
-    $('.side-edit-mode').show();
-    $('.side-view-mode').hide();
-    // $('.editable').html(txt);
-    $('.side-panel ul.list-group li.add-list-item').remove();
-    $('.side-panel ul.list-group li').removeClass('list-hover');
-}
-
-// function for saving main content
-function saveContent() {
-    var updateTxt = editor.getValue();
-    // console.log(updateTxt);
-    // $.trim($('#content_wysihtml_editor').html());
-    if (updateTxt=='') {
-        if (confirm("You are about to save empty text, are you sure?")) {
-            $('#update_text').val(updateTxt);
-            $('#update_content').submit();
-        };
-    } else{
-        $('#update_text').val(updateTxt);
-        $('#update_content').submit();
-    };
-}
-
-$('#side_panel_modal').on('hidde.bs.modal', function(event) {
-    event.preventDefault();
-    if (sideIsChanged) {
-        if (confirm("You have made some changes, do you want to save?")) {
-            saveSideItem();
-        };
-    };
-    $('#side_wysihtml_editor').removeClass('expand-modal-editor');
-});
-
-$('#side_delete_item').click(function(event) {
-    deleteSideItem()
-});
-
-$('#content_view').click(function(event) {
-    if (isContentChanged==1) {
-        if (confirm("You have made some changes, do you want to save it?")) {
-            saveContent();
-        } else{
-            $('.editable').html(txt);
-        };
-    }else{
-        $('.editable').html(txt);
-    };
-    isContentChanged = 0;
-});
 
 
 // =======================================
@@ -262,7 +138,7 @@ if (sideState=="1") {
     $('#sidepanel_checkbox').bootstrapSwitch('state',false);
     // $('div.side-panel div.panel').hide();
 }
-// site panel switch state recorder
+// side panel switch state recorder
 $('#sidepanel_checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
     if (!state) {
         $('#side_panel_state').val(0);
@@ -289,6 +165,14 @@ $('#sidepanel_checkbox').on('switchChange.bootstrapSwitch', function(event, stat
 
 
     // $('#side_panel_state_frm').submit();
+});
+
+// code for wysihtml editor in side panel modal and start edit mode
+$('a.side-edit-mode').on('click', function(event) {
+    event.preventDefault();
+    SPView2Edit ();
+    $('a.side-view-mode').show();
+    $(this).hide();
 });
 
 // initialize wysihtml5
@@ -330,6 +214,27 @@ function createSideItem() {
     };
 }
 
+// function to switch view mode to edit mode for right panel
+function SPView2Edit () {
+    $('.side-view-mode').show();
+    $('.side-edit-mode').hide();
+    // prevent to add duplicate " + " button
+    if (!$('.side-panel ul.list-group li').hasClass('add-list-item')) {
+        $('.side-panel ul.list-group').prepend('<li class="list-group-item add-list-item" title="Add item"><i class="fa fa-plus fa-2"></i></li>')
+        $('.side-panel ul.list-group li').addClass('list-hover');
+        $('.side-panel ul.list-group li.add-list-item').removeClass('list-hover');
+    }
+}
+
+// function to switch edit mode to view mode for right panel
+function SPEdit2View () {
+    $('.side-edit-mode').show();
+    $('.side-view-mode').hide();
+    // $('.editable').html(editableTxt);
+    $('.side-panel ul.list-group li.add-list-item').remove();
+    $('.side-panel ul.list-group li').removeClass('list-hover');
+}
+
 // function for saving right panel item
 function saveSideItem() {
     var updateItem = sideEditor.getValue();
@@ -354,7 +259,6 @@ function deleteSideItem () {
     };
 }
 
-var isContentChanged = 0;
 var sideItem;
 var sideIsChanged = 0;
 var updateItemId; // id of selected side item
@@ -390,10 +294,10 @@ $('.side-view-mode').on('click', function(event) {
             saveContent();
             saveSideItem()
         } else{
-            edit2View ();
+            SPEdit2View ();
         };
     }else{
-        edit2View ();
+        SPEdit2View ();
     };
     // isContentChanged = 0;
     sideIsChanged=0;
@@ -406,6 +310,20 @@ $('#side_save_changes').on('click', function(event) {
     } else{
         createSideItem();
     };
+});
+
+$('#side_panel_modal').on('hidde.bs.modal', function(event) {
+    event.preventDefault();
+    if (sideIsChanged) {
+        if (confirm("You have made some changes, do you want to save?")) {
+            saveSideItem();
+        };
+    };
+    $('#side_wysihtml_editor').removeClass('expand-modal-editor');
+});
+
+$('#side_delete_item').click(function(event) {
+    deleteSideItem()
 });
 
 // side panel title editing
@@ -449,7 +367,7 @@ $('a#btn_edit_on').click(function(event) {
     openTextEditor();
     // side panel editing
     panelTitleEditOn();
-    view2Edit ();
+    SPView2Edit ();
 });
 $('a#btn_edit_off').click(function(event) {
     $('#btn_edit_on_li').show()
@@ -464,10 +382,10 @@ $('a#btn_edit_off').click(function(event) {
         if (confirm("You have made some changes, do you want to save it?")) {
             saveContent();
         } else{
-            $('.editable').html(txt);
+            $('.editable').html(editableTxt);
         };
     }else{
-        $('.editable').html(txt);
+        $('.editable').html(editableTxt);
     };
     isContentChanged = 0;
     // side panel
@@ -476,10 +394,10 @@ $('a#btn_edit_off').click(function(event) {
             saveContent();
             saveSideItem()
         } else{
-            edit2View ();
+            SPEdit2View ();
         };
     }else{
-        edit2View ();
+        SPEdit2View ();
     };
     panelTitleEditOff();
     // isContentChanged = 0;
