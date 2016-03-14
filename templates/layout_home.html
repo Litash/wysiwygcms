@@ -15,7 +15,8 @@
     <!-- TinyMCE editor -->
     <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="/static/bower_components/font-awesome/css/font-awesome.min.css">
     <!-- CSSake -->
     <link rel="stylesheet" type="text/css" href="/static/bower_components/csshake/dist/csshake.min.css">
     <!-- Bootstrap core CSS -->
@@ -41,11 +42,8 @@
                     <h4 class="modal-title">Edit item</h4>
                 </div>
                 <div class="modal-body">
-
-                        <textarea id="sideItemEditor" class="richTxtEditor" name="content">
-                        </textarea>
-
-
+                    <textarea id="sideItemEditor" class="richTxtEditor" name="content">
+                    </textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="side_delete_item" class="btn btn-danger">Delete message&nbsp;<i class="fa fa-trash-o"></i></button>
@@ -185,7 +183,7 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello, {{username}} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a id="upload_file" >Upload Files<i class="pull-right fa fa-upload"></i></a></li>
+                            <li><a href="javascript:;" id="upload_file" >Upload Files<i class="pull-right fa fa-upload"></i></a></li>
                             <li><a href="{{url_for('uploaded_files')}}" target="_blank">Browse Files<i class="pull-right fa fa-folder-open-o"></i></a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{{url_for('show_sites')}}">My Sites</a></li>
@@ -273,7 +271,7 @@
     <div class="footer container">
         <p class="text-center">Litash CMS, made by <a href="mailto:me@yichen.lu">Yichen Lu</a>.</p>
     </div>
-    
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -284,9 +282,9 @@
     <!-- Bootstrap switch js -->
     <script src="/static/bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
     <!-- wysihtml core javascript with default toolbar functions -->
-    <script src="/static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js"></script>
+    <!-- <script src="/static/bower_components/wysihtml/dist/wysihtml-toolbar.min.js"></script> -->
     <!-- rules defining tags, attributes and classes that are allowed -->
-    <script src="/static/bower_components/wysihtml/parser_rules/advanced_and_extended.js"></script>
+    <!-- <script src="/static/bower_components/wysihtml/parser_rules/advanced_and_extended.js"></script> -->
     <!-- <script src="/static/js/wysihtml_custom.js"></script> -->
     <script src="/static/js/txt_editor_ctrl.js"></script>
     <script src="/static/js/home_view_ctrl.js"></script>

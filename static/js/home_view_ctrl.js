@@ -264,6 +264,7 @@ function getItemID (itemDOM) {
 
 // function to detect if there is any changes made
 function isSideChanged() {
+    sideItem = new String($.trim($('.side-panel li.list-hover').html()));
     var rawViewableTxt = new String(sideItem);
     var rawEditableTxt = new String($.trim(tinymce.get('sideItemEditor').getContent()));
     var viewableTxt = $.trim(rawViewableTxt);
@@ -271,7 +272,10 @@ function isSideChanged() {
 
     console.log("viewableTxt = "+viewableTxt)
     console.log("editableTxt = "+editableTxt)
-    if (viewableTxt===editableTxt) {
+    if (editableTxt.length==0){
+        console.log("False");
+        return false;
+    }else if(viewableTxt===editableTxt) {
         console.log("False");
         return false;
     }else{
@@ -377,6 +381,7 @@ $('.side-view-mode').on('click', function(event) {
     // }else{
     //     SPEdit2View ();
     // };
+
     SPEdit2View ();
 });
 
@@ -395,12 +400,11 @@ $('#side_panel_modal').on('hide.bs.modal', function(event) {
     //     if (confirm("You have made some changes, do you want to save?")) {
     //         // updateSideItem();
     //     }else{
-    //         // $(this).modal('hide');
+
     //     }
     // }
-    // $(this).modal('hide');
     // $('#side_wysihtml_editor').removeClass('expand-modal-editor');
-    tinymce.get('sideItemEditor').setContent(sideItem);
+    // tinymce.get('sideItemEditor').setContent(sideItem);
 });
 
 $('#side_delete_item').click(function(event) {
@@ -461,16 +465,17 @@ $('a#btn_edit_off').click(function(event) {
     // content
     closeTextEditor()
     // side panel
-    if (isSideChanged()) {
-        if (confirm("You have made some changes, do you want to save it?")) {
-            saveContent();
-            updateSideItem()
-        } else{
-            SPEdit2View ();
-        };
-    }else{
-        SPEdit2View ();
-    };
+    // if (isSideChanged()) {
+    //     if (confirm("You have made some changes, do you want to save it?")) {
+    //         saveContent();
+    //         updateSideItem()
+    //     } else{
+    //         SPEdit2View ();
+    //     };
+    // }else{
+    //     SPEdit2View ();
+    // };
+    SPEdit2View ();
     panelTitleEditOff();
 });
 

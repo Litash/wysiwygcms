@@ -367,7 +367,7 @@ def login():
     # Validate the user.
     # If the user is already authenticated return.
     if isAuthenticated():
-        logging.warning("----- isAuthenticated -----")
+        logging.info("----- isAuthenticated -----")
         session['logged_in'] = True
         # recordAuthenticatedUser()
         return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
@@ -375,19 +375,24 @@ def login():
     # Else if the GET parameter csticket is empty this is a new user who
     # we need to send for authentication.
     elif not request.args.get('csticket'):
+        logging.info("--------------- new user, need to send for authentication")
         url = sendForAuthentication()
-        logging.warning(url + "\n\nredirecting\n")
+        logging.info(url + "\n\nredirecting\n")
         return redirect(url)
 
     # Else if the GET parameter csticket is populated but doesn't match
     # the session csticket send the user for authentication.
     elif request.args.get('csticket') != session['csticket']:
+        logging.info("------------------ request.args.get('csticket') = %s", request.args.get('csticket'))
+        logging.info("------------------ session['csticket'] = %s", session['csticket'])
         url = sendForAuthentication()
-        logging.warning(url + "\n\nnot valid csticket\n=============\nredirecting\n")
+        logging.info(url + "\n\nnot valid csticket\n=============\nredirecting\n")
         return redirect(url)
 
     else:
         recordAuthenticatedUser()
+        logging.info("------------------ Authenticated user recorded.\nfullname = %s\nusercategory = %s\ndepartment = %s\ntime = %s",
+            session["fullname"],session["usercategory"],session["department"],session["authenticated"])
         session['logged_in'] = True
         return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
 
@@ -437,7 +442,7 @@ def sendForAuthentication():
     url = AUTH_SERVICE_URL + "?url=" + \
         DEVELOPER_URL + "&csticket=" + csticket
 
-    logging.warning(url + "\n\send for authentication\n")
+    logging.warning(url + "\n\nsend for authentication\n")
     return url
 
 
@@ -500,7 +505,7 @@ def rejectUser():
 
 @app.route('/logout')
 def logout():
-    # logging.info('---------- Logging out %s ----------', session['username'])
+    logging.info('---------- Logging out %s ----------', session['fullname'])
     session.clear()
     return redirect(AUTH_LOGOUT_URL)
 
