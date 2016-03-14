@@ -12,11 +12,9 @@
     function resize() {
         if ($window.width() < 640) {
             // small screen
-            // wysihtmlBone = '<div id="content_wysihtml_toolbar" class="wysihtml-toolbar" style="display:none"> <div class="toolbar-main"> <div class="row"> <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="Bold"><i class="fa fa-bold"></i></button> <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="Italic"><i class="fa fa-italic"></i></button> <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="Underline"><i class="fa fa-underline"></i></button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"> <span class="red">&nbsp;</span> </button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"> <span class="green">&nbsp;</span> </button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"> <span class="blue">&nbsp; </span> </button> <button class="btn btn-default" data-wysihtml5-command="insertOrderedList" title="Ordered List" type="button"><i class="fa fa-list-ol"></i></button> <button class="btn btn-default" data-wysihtml5-command="insertUnorderedList" title="Unordered List" type="button"><i class="fa fa-list-ul"></i></button> <button type="submit" class="btn btn-primary pull-right" id="save_changes" title="Save Changes"><i class="fa fa-floppy-o"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="Redo"><i class="fa fa-repeat"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="Undo"><i class="fa fa-undo"></i></button> <button type="submit" class="btn btn-default pull-right" id="content_view" title="View"><i class="fa fa-eye"></i></button> </div> </div> </div> <div id="content_wysihtml_editor" class="wysihtml-editor"> </div>';
             return $html.removeClass('pull-right');
         }
         // big screen
-        // wysihtmlBone = '<div id="content_wysihtml_toolbar" class="wysihtml-toolbar" style="display:none"> <div class="toolbar-main"> <div class="row"> <button class="btn btn-default" data-wysihtml5-command="bold" unselectable="on" title="Bold"><i class="fa fa-bold"></i></button> <button class="btn btn-default" data-wysihtml5-command="italic" unselectable="on" title="Italic"><i class="fa fa-italic"></i></button> <button class="btn btn-default" data-wysihtml5-command="underline" unselectable="on" title="Underline"><i class="fa fa-underline"></i></button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" unselectable="on"><i class="fa fa-header"></i>1</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" unselectable="on"><i class="fa fa-header"></i>2</button> <button class="btn btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" unselectable="on"><i class="fa fa-header"></i>3</button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red" unselectable="on"> <span class="red">&nbsp;</span> </button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green" unselectable="on"> <span class="green">&nbsp;</span> </button> <button class="btn btn-default" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue" unselectable="on"> <span class="blue">&nbsp; </span> </button> <button class="btn btn-default" data-wysihtml5-command="insertOrderedList" title="Ordered List" type="button"><i class="fa fa-list-ol"></i></button> <button class="btn btn-default" data-wysihtml5-command="insertUnorderedList" title="Unordered List" type="button"><i class="fa fa-list-ul"></i></button> <button type="submit" class="btn btn-primary pull-right" id="save_changes" title="Save Changes"><i class="fa fa-floppy-o"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="redo" title="Redo"><i class="fa fa-repeat"></i></button> <button class="btn btn-default pull-right" data-wysihtml5-command="undo" title="Undo"><i class="fa fa-undo"></i></button> <button type="submit" class="btn btn-default pull-right" id="content_view" title="View"><i class="fa fa-eye"></i></button> </div> <div class="row"> <button class="btn btn-default" data-wysihtml5-command="createLink" title="Insert Link" type="button"><i class="fa fa-link"></i></button> <button class="btn btn-default" data-wysihtml5-command="insertImage" id="insert_img" title="Insert Image" type="button"><i class="fa fa-picture-o"></i></button> <button class="btn btn-default" id="upload_file" title="Upload Files"><i class="fa fa-upload"></i></button> <a class="btn btn-default" href="/uploads" title="Browse Files" target="_blank"><i class="fa fa-folder-open-o"></i></a> </div> </div> <div class="row"> <div data-wysihtml5-dialog="createLink" style="display:none" class="row"> <label for="link-url">Link URL</label> <div class="input-group"> <input id="link-url" data-wysihtml5-dialog-field="href" value="http://" class="text form-control"> <span class="input-group-btn"> <button class="btn btn-primary" data-wysihtml5-dialog-action="save" type="button">OK</button> </span> </div> </div> <div data-wysihtml5-dialog="insertImage" style="display:none" class="row"> <label for="img-url">Image URL</label> <div class="input-group"> <input id="img-url" class="form-control" data-wysihtml5-dialog-field="src" value="http://"> <span class="input-group-btn"> <button class="btn btn-primary" data-wysihtml5-dialog-action="save" type="button">OK</button> </span> </div> </div> </div> </div> <div id="content_wysihtml_editor" class="wysihtml-editor"> </div>';
         $html.addClass('pull-right');
     }
 
@@ -124,9 +122,87 @@ $(document).on('click', 'a#remove_menu_item', function(event) {
     }
 });
 
+
+// =======================================
+// functions for control content text editor
+// =======================================
+
+// double click trigger for content text editor
+$('.viewable').dblclick(function(event) {
+    openTextEditor();
+});
+
+// switch on text editor for page content
+function openTextEditor() {
+    $('.viewable').hide();
+    $('.editable').show();
+}
+
+function closeTextEditor() {
+    if (isContentChanged()) {
+        if (confirm("You have made some changes, cancel without saving?")) {
+            $('.editable').hide();
+            $('.viewable').show();
+            tinymce.get('contetnEditor').setContent($('div.viewable').html());
+        }
+    }else{
+        $('.editable').hide();
+        $('.viewable').show();
+    }
+}
+
+// save text functions
+$('#save_changes').on('click', function(event) {
+    event.preventDefault();
+    saveContent();
+});
+
+// function to detect if there is any changes made
+function isContentChanged() {
+    var rawViewableTxt = new String($('div.viewable').html());
+    var rawEditableTxt = new String(tinymce.get('contetnEditor').getContent());
+    var viewableTxt = $.trim(rawViewableTxt);
+    var editableTxt = $.trim(rawEditableTxt);
+
+    if (viewableTxt===editableTxt) {
+        console.log("False");
+        return false;
+    }else{
+        console.log("True");
+        return true;
+    }
+}
+
+// function for saving main content
+function saveContent() {
+    var updateTxt = $('#contetnEditor').text();
+    // console.log(updateTxt);
+    // $.trim($('#content_wysihtml_editor').html());
+    if (updateTxt=='') {
+        if (confirm("You are about to save empty text, are you sure?")) {
+            // $('#update_text').val(updateTxt);
+            $('#update_content').submit();
+        };
+    } else{
+        // $('#update_text').val(updateTxt);
+        $('#update_content').submit();
+    };
+}
+
+$('#cancel_changes').click(function(event) {
+    closeTextEditor();
+});
+
+
 // =======================================
 // code for side panel editor
 // =======================================
+
+var sideItem; // current item text
+var sideIsChanged = 0;
+var updateItemId; // id of selected side item
+var sideItemUrl; // url for side items on current page
+var isNewSideItem = 0;
 
 // side panel switch
 var sideState = $('#side_state').val();
@@ -175,16 +251,9 @@ $('a.side-edit-mode').on('click', function(event) {
     $(this).hide();
 });
 
-// initialize wysihtml5
-sideEditor = new wysihtml5.Editor('side_wysihtml_editor', {
-    toolbar: 'side_wysihtml_toolbar',
-    parserRules: wysihtml5ParserRules // defined in file parser rules javascript
-});
-
 function setModalValue (sideItem) {
     $('#side_panel_modal').modal('show');
-    sideEditor.setValue(sideItem, true);
-    sideEditor.on("change", sideOnChange);
+    tinymce.get('sideItemEditor').setContent(sideItem);
 }
 
 function getItemID (itemDOM) {
@@ -193,13 +262,27 @@ function getItemID (itemDOM) {
     return id;
 }
 
-function sideOnChange (sideIsChanged) {
-    sideIsChanged = 1;
+// function to detect if there is any changes made
+function isSideChanged() {
+    var rawViewableTxt = new String(sideItem);
+    var rawEditableTxt = new String($.trim(tinymce.get('sideItemEditor').getContent()));
+    var viewableTxt = $.trim(rawViewableTxt);
+    var editableTxt = $.trim(rawEditableTxt);
+
+    console.log("viewableTxt = "+viewableTxt)
+    console.log("editableTxt = "+editableTxt)
+    if (viewableTxt===editableTxt) {
+        console.log("False");
+        return false;
+    }else{
+        console.log("True");
+        return true;
+    }
 }
 
 // function for creating right panel item
 function createSideItem() {
-    var updateItem = sideEditor.getValue();
+    var updateItem = tinymce.get('sideItemEditor').getContent();
     // $.trim($('#content_wysihtml_editor').html());
     if (updateItem=='') {
         if (confirm("You are about to save empty text, are you sure?")) {
@@ -211,6 +294,22 @@ function createSideItem() {
         $('#side_create_text').val(updateItem);
         // $('#side_create_url').val(updateItemId);
         $('#create_side').submit();
+    };
+}
+
+// function for updating right panel item
+function updateSideItem() {
+    var updateItem = tinymce.get('sideItemEditor').getContent();
+    if (updateItem=='') {
+        if (confirm("You are about to save empty text, are you sure?")) {
+            $('#side_update_text').val(updateItem);
+            $('#side_update_id').val(updateItemId);
+            $('#update_side').submit();
+        };
+    } else{
+        $('#side_update_text').val(updateItem);
+        $('#side_update_id').val(updateItemId);
+        $('#update_side').submit();
     };
 }
 
@@ -235,22 +334,6 @@ function SPEdit2View () {
     $('.side-panel ul.list-group li').removeClass('list-hover');
 }
 
-// function for saving right panel item
-function saveSideItem() {
-    var updateItem = sideEditor.getValue();
-    if (updateItem=='') {
-        if (confirm("You are about to save empty text, are you sure?")) {
-            $('#side_update_text').val(updateItem);
-            $('#side_update_id').val(updateItemId);
-            $('#update_side').submit();
-        };
-    } else{
-        $('#side_update_text').val(updateItem);
-        $('#side_update_id').val(updateItemId);
-        $('#update_side').submit();
-    };
-}
-
 function deleteSideItem () {
     if (confirm("Confirm to delete this message?")) {
         $('#side_delete_id').val(updateItemId);
@@ -259,17 +342,12 @@ function deleteSideItem () {
     };
 }
 
-var sideItem;
-var sideIsChanged = 0;
-var updateItemId; // id of selected side item
-var sideItemUrl; // url for side items on current page
-var isNewSideItem = 0;
 
 // setup important values for side panel item on click
 $(document).on('click', '.side-panel li.list-hover', function(event) {
     event.preventDefault();
     isNewSideItem = 0
-    sideItem = $(this).html();
+    sideItem = new String($.trim($(this).html()));
     setModalValue (sideItem);
     updateItemId = getItemID($(this));
     // sideItemUrl =
@@ -282,44 +360,47 @@ $(document).on('click', 'li.list-group-item.add-list-item', function(event) {
     isNewSideItem = 1;
     sideItem = "";
     setModalValue (sideItem);
-    $('#side_wysihtml_editor').addClass('expand-modal-editor');
+    // $('#side_wysihtml_editor').addClass('expand-modal-editor');
     $('#side_delete_item').hide();
 });
 
 // side panel mode ctrl
 $('.side-view-mode').on('click', function(event) {
     event.preventDefault();
-    if (sideIsChanged==1) {
-        if (confirm("You have made some changes, do you want to save it?")) {
-            saveContent();
-            saveSideItem()
-        } else{
-            SPEdit2View ();
-        };
-    }else{
-        SPEdit2View ();
-    };
-    // isContentChanged = 0;
-    sideIsChanged=0;
+    // if (isSideChanged()) {
+    //     if (confirm("You have made some changes, do you want to save it?")) {
+    //         saveContent();
+    //         updateSideItem()
+    //     } else{
+    //         SPEdit2View ();
+    //     };
+    // }else{
+    //     SPEdit2View ();
+    // };
+    SPEdit2View ();
 });
 
 $('#side_save_changes').on('click', function(event) {
     event.preventDefault();
     if (isNewSideItem == 0) {
-        saveSideItem();
+        updateSideItem();
     } else{
         createSideItem();
     };
 });
 
-$('#side_panel_modal').on('hidde.bs.modal', function(event) {
-    event.preventDefault();
-    if (sideIsChanged) {
-        if (confirm("You have made some changes, do you want to save?")) {
-            saveSideItem();
-        };
-    };
-    $('#side_wysihtml_editor').removeClass('expand-modal-editor');
+$('#side_panel_modal').on('hide.bs.modal', function(event) {
+    // isSideChanged()
+    // if (isSideChanged()) {
+    //     if (confirm("You have made some changes, do you want to save?")) {
+    //         // updateSideItem();
+    //     }else{
+    //         // $(this).modal('hide');
+    //     }
+    // }
+    // $(this).modal('hide');
+    // $('#side_wysihtml_editor').removeClass('expand-modal-editor');
+    tinymce.get('sideItemEditor').setContent(sideItem);
 });
 
 $('#side_delete_item').click(function(event) {
@@ -378,21 +459,12 @@ $('a#btn_edit_off').click(function(event) {
     $('a#add_menu_item').hide();
     $('a#remove_menu_item').hide();
     // content
-    if (isContentChanged==1) {
-        if (confirm("You have made some changes, do you want to save it?")) {
-            saveContent();
-        } else{
-            $('.editable').html(editableTxt);
-        };
-    }else{
-        $('.editable').html(editableTxt);
-    };
-    isContentChanged = 0;
+    closeTextEditor()
     // side panel
-    if (sideIsChanged==1) {
+    if (isSideChanged()) {
         if (confirm("You have made some changes, do you want to save it?")) {
             saveContent();
-            saveSideItem()
+            updateSideItem()
         } else{
             SPEdit2View ();
         };
@@ -400,8 +472,6 @@ $('a#btn_edit_off').click(function(event) {
         SPEdit2View ();
     };
     panelTitleEditOff();
-    // isContentChanged = 0;
-    sideIsChanged=0;
 });
 
 // =======================================
