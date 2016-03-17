@@ -7,12 +7,12 @@
         </div>
         <div class="editable">
             <div class="row">
+                <textarea id="contetnEditor" class="richTxtEditor" >
+                {{content.text | safe}}
+                </textarea>
                 <form id="update_content" action="{{url_for('update_content')}}" method="post">
-                    <textarea id="contetnEditor" class="richTxtEditor" name="content">
-                    {{content.text | safe}}
-                    </textarea>
                     <div class="hidden" id="dump">
-                        <!-- <input type="text" id="update_text" > -->
+                        <input type="text" id="update_text" name="content">
                         <input type="text" id="update_url" name="url" value="{{content.url}}">
                     </div>
                 </form>

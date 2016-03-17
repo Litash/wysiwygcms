@@ -20,6 +20,7 @@ from flask.ext.autoindex import AutoIndex
 # create our little application
 app = Flask(__name__)
 
+BASE_URL = ""
 SITE_NAME = "" # second part of current url
 SITE_TITLE = ""
 MENU = "" # current selected menu item
@@ -69,7 +70,10 @@ def teardown_request(exception):
 @app.route('/site')
 def show_sites():
     if not isAuthenticated():
-        return redirect(url_for('login'))
+        global BASE_URL
+        BASE_URL = request.base_url
+        logging.info('-------------- request.base_url = ',request.base_url)
+        return login()
     cur = g.db.execute('SELECT id, name, url FROM Site;')
     sites = [dict(id=row[0], name=row[1], url=row[2]) for row in cur.fetchall()]
 
@@ -171,7 +175,7 @@ def add_site():
     # logging.info(existSites)
     g.db.execute('INSERT INTO Site (name, title, url) values (?, ?, ?);',[siteName, siteTitle, siteURL])
     g.db.execute('INSERT INTO Menu (siteName, idx, item, url) values (?, ?, ?, ?);',[siteName, 0, "Home", siteURL+"/home"])
-    g.db.execute('INSERT INTO Content (content, url) values ("<br><br><br><br><br><br>", ?);',[siteURL+"/home"])
+    g.db.execute('INSERT INTO Content (content, url) values ("", ?);',[siteURL+"/home"])
     g.db.execute('INSERT INTO SidePanelState (url, state, title) values(?, 1, "undefined")',[siteURL+"/home"])
     g.db.commit()
 
@@ -243,19 +247,19 @@ def remove_menu_item():
     item = request.form['item']
     url = request.form['url']
 
-    g.db.execute('DELETE FROM Menu WHERE siteName=? AND item=? AND url=?;',
-        [SITE_NAME, item, url])
-    g.db.execute('DELETE FROM Content WHERE url=?;', [url])
-    g.db.execute('DELETE FROM SidePanelItem WHERE url=?;', [url])
-    g.db.execute('DELETE FROM SidePanelState WHERE url=?;', [url])
-    g.db.commit()
-
     # get menu item for this site
     cur = g.db.execute('SELECT idx, item, url FROM Menu WHERE siteName = ? ORDER BY idx;'
         , [SITE_NAME])
     menuList = [dict(idx=row[0], item=row[1], url=row[2]) for row in cur.fetchall()]
     # logging.info("------------- menuList = %s", menuList)
     firstMenu = menuList[0]['item']
+
+    g.db.execute('DELETE FROM Menu WHERE siteName=? AND item=? AND url=?;',
+        [SITE_NAME, item, url])
+    g.db.execute('DELETE FROM Content WHERE url=?;', [url])
+    g.db.execute('DELETE FROM SidePanelItem WHERE url=?;', [url])
+    g.db.execute('DELETE FROM SidePanelState WHERE url=?;', [url])
+    g.db.commit()
 
     return redirect(url_for('show_home', siteName=SITE_NAME, menu=firstMenu.lower()))
 
@@ -268,15 +272,16 @@ def update_content():
     if not session.get('logged_in'):
         abort(401)
     # if request.method == 'GET':
-    logContent = request.form['content']
-    logUrl = request.form['url']
-    logging.info('---------- update content -------- %s', logContent)
-    logging.info('---------- update URL -------- %s', logUrl)
+    newContent = request.form['content']
+    url = request.form['url']
+    logging.info('---------- update content -------- %s', newContent)
+    logging.info('---------- update URL -------- %s', url)
     g.db.execute('UPDATE Content SET content = ? WHERE url = ?;',
-                 [logContent, logUrl])
+                 [newContent, url])
     g.db.commit()
     # flash('')
-    return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
+    # return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
+    return json.dumps({'status':'OK','newContent':newContent,'url':url})
 
 
 ####
@@ -370,7 +375,8 @@ def login():
         logging.info("----- isAuthenticated -----")
         session['logged_in'] = True
         # recordAuthenticatedUser()
-        return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
+        # return redirect(url_for('show_home', siteName=SITE_NAME, menu=MENU))
+        return redirect(BASE_URL)
 
     # Else if the GET parameter csticket is empty this is a new user who
     # we need to send for authentication.
@@ -480,15 +486,18 @@ def getTimeAuthenticated():
     A function to get the timestamp when the user authenticated.
     """
     if session.get("authenticated"):
-        # # example of time string in session = 2016-03-10 08:31:44.809080
+        # example of time string in session = 2016-03-10 08:31:44.809080
         # sessionTime = datetime.datetime.strptime(session["authenticated"], '%Y-%m-%d %H:%M:%S.%f')
         # nowTime = datetime.datetime.now()
-        # expirePeriod = datetime.timedelta(seconds=20)
-        # logging.info("------------- Authenticated = %s", sessionTime)
+        # expirePeriod = datetime.timedelta(seconds=10)
+        # logging.info("------------- sessionTime = %s", sessionTime)
+        # logging.info("------------- nowTime = %s", nowTime)
         # # check if time expired
-        # if (sessionTime - nowTime) < expirePeriod:
+        # if (nowTime - sessionTime ) > expirePeriod:
         #     logging.info("------------- session expired")
+        #     session.clear()
         #     return "False"
+        # else:
         return session["authenticated"]
     else:
         return "False"

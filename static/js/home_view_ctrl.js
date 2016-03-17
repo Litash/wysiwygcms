@@ -105,13 +105,16 @@ var minusClicked = 0;
 $(document).on('click', 'a#remove_menu_item', function(event) {
     event.preventDefault();
     if (!minusClicked) {
-        // $('.nav-page-menu').append('');
         $('.nav-page-menu').parent('li').prepend('<span class="menu-remover-cover shake-rotate"><i class="fa fa-times-circle x-menu-item" style="color:#D50000;"></i></span>');
         $('.menu-remover-cover').click(function(event) {
             if (confirm("Comfirm to delete this menu item and corresponding page?")) {
-                $('#rm_item').val($(this).siblings('a').text());
-                $('#rm_item_url').val($(this).siblings('a').attr('href'));
-                $('#menu_remove_frm').submit();
+                // if ($('ul#menu_editable li').length == 3) {
+                //     alert("This is the last menu item, you can't delete it! Consider to delete this site instead.")
+                // }else{
+                    $('#rm_item').val($(this).siblings('a').text());
+                    $('#rm_item_url').val($(this).siblings('a').attr('href'));
+                    $('#menu_remove_frm').submit();
+                // }
             }
         });
         minusClicked = 1;
@@ -180,12 +183,12 @@ function saveContent() {
     // $.trim($('#content_wysihtml_editor').html());
     if (updateTxt=='') {
         if (confirm("You are about to save empty text, are you sure?")) {
-            // $('#update_text').val(updateTxt);
-            $('#update_content').submit();
+            // $('#update_content').submit();
+            updateContentAjax();
         };
     } else{
-        // $('#update_text').val(updateTxt);
-        $('#update_content').submit();
+        // $('#update_content').submit();
+        updateContentAjax();
     };
 }
 
@@ -193,6 +196,37 @@ $('#cancel_changes').click(function(event) {
     closeTextEditor();
 });
 
+function updateContentAjax() {
+    // var formData = new FormData();
+    // var newContent = new String(tinymce.get('contetnEditor').getContent());
+    // var updateURL = new String($('input#update_url').val());
+    // formData.append('content', newContent);
+    // formData.append('url', updateURL);
+    $('#update_text').val(tinymce.get('contetnEditor').getContent());
+    console.log($('#update_content').serialize())
+    $.ajax({
+        url: '/update_content',
+        type: 'POST',
+        // dataType: 'json',
+        data: $('#update_content').serialize()
+    })
+    .done(function(data) {
+        console.log(data);
+        console.log("success");
+        var res = $.parseJSON(data);
+
+        $('.viewable').html(res.newContent);
+        $('.editable').hide();
+        $('.viewable').show();
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+
+}
 
 // =======================================
 // code for side panel editor
@@ -223,6 +257,7 @@ $('#sidepanel_checkbox').on('switchChange.bootstrapSwitch', function(event, stat
         $('#side_panel_state').val(1);
         $('div.side-panel div.panel').show();
     }
+    // update state using ajax
     $.ajax({
         url: '/update_side_state',
         type: 'POST',
