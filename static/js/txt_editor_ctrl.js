@@ -8,7 +8,7 @@ $('.editable').hide();
 tinymce.init({
     selector: 'textarea.richTxtEditor', // change this value according to your HTML
     theme: 'modern',
-    height: 480,
+    height: 400,
     plugins: [
         'advlist autolink lists link image charmap hr anchor pagebreak',
         'searchreplace wordcount visualblocks visualchars code fullscreen',

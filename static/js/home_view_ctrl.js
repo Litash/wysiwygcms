@@ -102,8 +102,7 @@ $('#btn_add_menu_x').click(function(event) {
    $('a#add_menu_item').show();
 });
 var minusClicked = 0;
-$(document).on('click', 'a#remove_menu_item', function(event) {
-    event.preventDefault();
+function toggleRemoveMenu() {
     if (!minusClicked) {
         $('.nav-page-menu').parent('li').prepend('<span class="menu-remover-cover shake-rotate"><i class="fa fa-times-circle x-menu-item" style="color:#D50000;"></i></span>');
         $('.menu-remover-cover').click(function(event) {
@@ -123,6 +122,10 @@ $(document).on('click', 'a#remove_menu_item', function(event) {
         $('.x-menu-item').remove();
         minusClicked = 0;
     }
+}
+$(document).on('click', 'a#remove_menu_item', function(event) {
+    event.preventDefault();
+    toggleRemoveMenu();
 });
 
 
@@ -162,18 +165,50 @@ $('#save_changes').on('click', function(event) {
 
 // function to detect if there is any changes made
 function isContentChanged() {
-    var rawViewableTxt = new String($('div.viewable').html());
-    var rawEditableTxt = new String(tinymce.get('contetnEditor').getContent());
-    var viewableTxt = $.trim(rawViewableTxt);
-    var editableTxt = $.trim(rawEditableTxt);
+    // var rawViewableTxt = new String($('div.viewable').html());
+    // var rawEditableTxt = new String(tinymce.get('contetnEditor').getContent());
+    // var viewableTxt = $.trim(rawViewableTxt);
+    // var editableTxt = $.trim(rawEditableTxt);
 
-    if (viewableTxt===editableTxt) {
-        console.log("False");
-        return false;
-    }else{
-        console.log("True");
-        return true;
-    }
+    // console.log("viewableTxt = "+viewableTxt);
+    // console.log("editableTxt = "+editableTxt);
+
+    // if (viewableTxt===editableTxt) {
+    //     console.log("False");
+    //     return false;
+    // }else{
+    //     console.log("True");
+    //     return true;
+    // }
+    return false;
+}
+
+function updateContentAjax() {
+    $('#update_text').val(tinymce.get('contetnEditor').getContent());
+    console.log($('#update_content').serialize())
+    $.ajax({
+        url: '/update_content',
+        type: 'POST',
+        // dataType: 'json',
+        data: $('#update_content').serialize()
+    })
+    .done(function(data) {
+        console.log(data);
+        console.log("success");
+
+        var res = $.parseJSON(data);
+        $('.viewable').html(res.newContent);
+
+        $('.editable').hide();
+        $('.viewable').show();
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+
 }
 
 // function for saving main content
@@ -196,37 +231,7 @@ $('#cancel_changes').click(function(event) {
     closeTextEditor();
 });
 
-function updateContentAjax() {
-    // var formData = new FormData();
-    // var newContent = new String(tinymce.get('contetnEditor').getContent());
-    // var updateURL = new String($('input#update_url').val());
-    // formData.append('content', newContent);
-    // formData.append('url', updateURL);
-    $('#update_text').val(tinymce.get('contetnEditor').getContent());
-    console.log($('#update_content').serialize())
-    $.ajax({
-        url: '/update_content',
-        type: 'POST',
-        // dataType: 'json',
-        data: $('#update_content').serialize()
-    })
-    .done(function(data) {
-        console.log(data);
-        console.log("success");
-        var res = $.parseJSON(data);
 
-        $('.viewable').html(res.newContent);
-        $('.editable').hide();
-        $('.viewable').show();
-    })
-    .fail(function() {
-        console.log("error");
-    })
-    .always(function() {
-        console.log("complete");
-    });
-
-}
 
 // =======================================
 // code for side panel editor
@@ -299,24 +304,25 @@ function getItemID (itemDOM) {
 
 // function to detect if there is any changes made
 function isSideChanged() {
-    sideItem = new String($.trim($('.side-panel li.list-hover').html()));
-    var rawViewableTxt = new String(sideItem);
-    var rawEditableTxt = new String($.trim(tinymce.get('sideItemEditor').getContent()));
-    var viewableTxt = $.trim(rawViewableTxt);
-    var editableTxt = $.trim(rawEditableTxt);
+    // sideItem = new String($.trim($('.side-panel li.list-hover').html()));
+    // var rawViewableTxt = new String(sideItem);
+    // var rawEditableTxt = new String($.trim(tinymce.get('sideItemEditor').getContent()));
+    // var viewableTxt = $.trim(rawViewableTxt);
+    // var editableTxt = $.trim(rawEditableTxt);
 
-    console.log("viewableTxt = "+viewableTxt)
-    console.log("editableTxt = "+editableTxt)
-    if (editableTxt.length==0){
-        console.log("False");
-        return false;
-    }else if(viewableTxt===editableTxt) {
-        console.log("False");
-        return false;
-    }else{
-        console.log("True");
-        return true;
-    }
+    // console.log("viewableTxt = "+viewableTxt)
+    // console.log("editableTxt = "+editableTxt)
+    // if (editableTxt.length==0){
+    //     console.log("False");
+    //     return false;
+    // }else if(viewableTxt===editableTxt) {
+    //     console.log("False");
+    //     return false;
+    // }else{
+    //     console.log("True");
+    //     return true;
+    // }
+    return false;
 }
 
 // function for creating right panel item
@@ -497,6 +503,9 @@ $('a#btn_edit_off').click(function(event) {
     // menu
     $('a#add_menu_item').hide();
     $('a#remove_menu_item').hide();
+    if (minusClicked = 1) {
+        toggleRemoveMenu();
+    }
     // content
     closeTextEditor()
     // side panel
